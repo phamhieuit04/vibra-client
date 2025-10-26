@@ -33,3 +33,5 @@ coverage
 public/*.js
 
 .env
+firebase.js
+firebase-messaging-sw.js
