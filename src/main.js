@@ -4,7 +4,7 @@ import router from './router';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-import { firebaseApp, firebaseMessaging } from '../public/firebase';
+import { firebaseApp, firebaseMessaging } from '../firebase';
 import App from './App.vue';
 
 const pinia = createPinia();
