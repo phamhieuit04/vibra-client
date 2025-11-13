@@ -6,6 +6,7 @@ import Verify from '@/views/verify.vue';
 import Payfail from '@/views/payfail.vue';
 import Paysuccess from '@/views/paysuccess.vue';
 import VerifyDone from '@/views/verify-done.vue';
+import InterestGerne from '@/views/interest-gerne.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -49,6 +50,11 @@ const router = createRouter({
             name: 'verify-done',
             component: VerifyDone,
         },
+        {
+            path: '/interest-gerne',
+            name: 'interest-gerne',
+            component: InterestGerne,
+        }
     ],
 });
 

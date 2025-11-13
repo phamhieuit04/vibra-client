@@ -35,7 +35,7 @@ const login = async () => {
                 console.log('Chưa verify');
                 router.push('/verify');
             } else {
-                router.push('/');
+                router.push('/interest-gerne');
                 sendGreeting();
             }
             isLoading.value = false;
