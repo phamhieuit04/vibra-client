@@ -81,7 +81,7 @@ export default {
                     this.authStore.setIsLoggedIn(true);
                     this.authStore.setUser(apiRes.data.data);
                     this.sendGreeting();
-                    this.$router.push('/');
+                    this.$router.push('/interest-gerne');
                 }
             }).catch((apiError) => {
                 console.log(apiError);

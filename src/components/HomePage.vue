@@ -23,6 +23,7 @@ const { currentTrack, isPlaying } = storeToRefs(useSong);
 const popularAlbum = ref([]);
 const topArtist = ref([]);
 const topSong = ref([]);
+const interestSongs = ref([]);
 const isLoading = ref(true);
 
 async function FetchAlbumData() {
@@ -56,7 +57,22 @@ async function FetchSongData() {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
         });
+        console.log(res.data.data);
         topSong.value = res.data.data;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function FetchInterestSongData() {
+    try {
+        const res = await api.get('/home/get-recommended-songs', {
+            headers: {
+                Authorization: 'Bearer ' + authStore.user.token,
+            },
+        });
+        console.log(res.data.data);
+        interestSongs.value = res.data.data;
     } catch (e) {
         console.log(e);
     }
@@ -77,6 +93,7 @@ async function playThisAlbum(id) {
 }
 
 async function handleLoading() {
+    await FetchInterestSongData();
     await FetchAlbumData();
     await FetchArtistData();
     await FetchSongData();
@@ -90,6 +107,57 @@ onMounted(() => {
 <template>
     <div class="h-full w-full space-y-6 rounded-[24px] bg-[#1D1512] text-[#FFFF]">
         <div class="scrollbar-style h-[calc(100vh-12rem)] overflow-auto px-8 py-8">
+
+            <div class="mb-8 text-[#FFE5D6]">
+                <h2 class="mb-1 text-2xl font-semibold">
+                    Bài hát phù hợp với bạn
+                </h2>
+                <div class="scrollbar-style flex space-x-4 overflow-x-auto">
+                    <div class="flex w-max space-x-4 px-1 py-2">
+                        <div v-for="item in interestSongs" :key="item.id"
+                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                            @click="useSong.playOrPauseThisSong(item)">
+                            <div class="mb-2 h-40 w-40 rounded-full bg-zinc-700">
+                                <img class="h-40 w-40 rounded-full object-cover" :src="item.thumbnail_path" alt=""
+                                    :class="{
+                                        'animate-spin':
+                                            currentTrack.id == item.id &&
+                                            isPlaying,
+                                    }" style="animation-duration: 5s" @error="
+                                        (event) =>
+                                            (event.target.src = defaultImgage)
+                                    " />
+                            </div>
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="font-medium">{{ item.name }}</p>
+                                    <p class="text-sm">
+                                        {{ item.total_played }} lượt nghe
+                                    </p>
+                                </div>
+                                <button @click.stop="
+                                    useSong.addSongToWaitlist(item)
+                                    " class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
+                                    <Icon icon="material-symbols:home-storage-outline" class="text-2xl" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div v-if="isLoading"
+                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
+                            <div class="mb-2 h-40 w-40 rounded-full bg-zinc-700"></div>
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="my-2 h-5 w-24 rounded bg-zinc-700"></div>
+                                    <div class="my-2 h-5 w-28 rounded bg-zinc-700"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="mb-8 text-[#FFE5D6]">
                 <h2 class="mb-1 text-2xl font-semibold">Album phổ biến</h2>
                 <div class="scrollbar-style flex space-x-4 overflow-x-auto">

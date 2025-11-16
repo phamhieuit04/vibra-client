@@ -15,16 +15,20 @@ const selectedCategories = ref([]);
 const loading = ref(true)
 
 function toggleSelect(item) {
-  const index = selectedCategories.value.indexOf(item)
-  if (index === -1) {
-    selectedCategories.value.push(item)
-  } else {
-    selectedCategories.value.splice(index, 1)
-  }
+    const index = selectedCategories.value.indexOf(item)
+    if (index === -1) {
+        selectedCategories.value.push(item)
+    } else {
+        selectedCategories.value.splice(index, 1)
+    }
 }
 
-function HandleSubmit(){
-    console.log(selectedCategories.value); 
+function HandleSubmit() {
+    let selectedCateString = "";
+    selectedCategories.value.forEach(categories => {
+        selectedCateString += categories.id + ",";
+    });
+    sendCategories(selectedCateString);
     router.push("/");
 }
 
@@ -44,6 +48,24 @@ async function getAllCategories() {
         console.log(e);
     }
 }
+
+async function sendCategories(cateString) {
+    try {
+        const res = await api.get(`/home/save-interested?category_id=${cateString}`, {
+            headers: {
+                Authorization: 'Bearer ' + authStore.user.token,
+            },
+        });
+
+        if (res.data.code === 200) {
+            categories = res.data.data;
+            loading.value = false;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 onMounted(() => {
     getAllCategories();
@@ -65,19 +87,19 @@ onMounted(() => {
 
             <hr class="w-full text-gray-500 mt-10 opacity-15" />
 
-            <div v-if="!loading" class="w-full h-96 items-start justify-start flex flex-wrap p-2 gap-5 overflow-y-auto scrollbar-none">
+            <div v-if="!loading"
+                class="w-full h-96 items-start justify-start flex flex-wrap p-2 gap-5 overflow-y-auto scrollbar-none">
                 <div v-for="item in categories" :key="item.id" class="w-40 h-10">
-                    <div
-                        class="cursor-pointer select-none rounded-xl border p-4 text-center" @click="toggleSelect(item)" :class="selectedCategories.includes(item) 
+                    <div class="cursor-pointer select-none rounded-xl border p-4 text-center"
+                        @click="toggleSelect(item)" :class="selectedCategories.includes(item)
                             ? 'bg-[#BC4D15] text-white border-[#BC4D15] shadow-lg scale-105'
-                            : 'bg-white text-gray-800 hover:bg-gray-100 border-gray-300' "> 
-                        {{ item.name }} 
+                            : 'bg-white text-gray-800 hover:bg-gray-100 border-gray-300'">
+                        {{ item.name }}
                     </div>
                 </div>
             </div>
 
-            <button
-                @click="HandleSubmit()"
+            <button @click="HandleSubmit()"
                 class="mt-6 rounded-full w-80 bg-[#BC4D15] p-4 font-bold text-black transition ease-in hover:scale-105 hover:bg-[#b36b47]">
                 Xác nhận
             </button>
