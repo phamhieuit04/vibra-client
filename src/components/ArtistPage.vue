@@ -36,11 +36,14 @@ function checkMe() {
 
 async function getArtistSong() {
     try {
-        const res = await api.get(`/artist/get-artist-songs/${artistData.value.id}`, {
-            headers: {
-                Authorization: 'Bearer ' + authStore.user.token,
+        const res = await api.get(
+            `/artist/get-artist-songs/${artistData.value.id}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + authStore.user.token,
+                },
             },
-        });
+        );
         thisArtistListSong.value = res.data.data;
     } catch (e) {
         console.log(e);
@@ -49,11 +52,14 @@ async function getArtistSong() {
 }
 async function getArtistAlbum() {
     try {
-        const res = await api.get(`/artist/get-artist-albums/${artistData.value.id}`, {
-            headers: {
-                Authorization: 'Bearer ' + authStore.user.token,
+        const res = await api.get(
+            `/artist/get-artist-albums/${artistData.value.id}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + authStore.user.token,
+                },
             },
-        });
+        );
         thisArtistListAlbum.value = res.data.data;
     } catch (e) {
         console.log(e);
@@ -78,11 +84,14 @@ async function followThisArtist() {
 }
 async function unfollowThisArtist() {
     try {
-        const res = await api.get(`/library/destroy-favorite-artist/${artistData.value.id}`, {
-            headers: {
-                Authorization: 'Bearer ' + authStore.user.token,
+        const res = await api.get(
+            `/library/destroy-favorite-artist/${artistData.value.id}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + authStore.user.token,
+                },
             },
-        });
+        );
         useActivity.fetchData();
         isFollowed.value = !isFollowed.value;
         useActivity.addNotify(false, 'Bạn đã hủy theo dõi nghệ sĩ!');
@@ -109,17 +118,20 @@ async function blockThisArtist() {
     }
 }
 
-watch(() => artistData.value, () => {
-    getArtistSong();
-    getArtistAlbum();
-    checkMe();
-    isFollowed.value = false;
-    followArtistList.value.forEach((artist) => {
-        if (artist.artist_id === artistData.value.id) {
-            isFollowed.value = true;
-        }
-    });
-});
+watch(
+    () => artistData.value,
+    () => {
+        getArtistSong();
+        getArtistAlbum();
+        checkMe();
+        isFollowed.value = false;
+        followArtistList.value.forEach((artist) => {
+            if (artist.artist_id === artistData.value.id) {
+                isFollowed.value = true;
+            }
+        });
+    },
+);
 
 onMounted(() => {
     getArtistSong();
@@ -134,13 +146,23 @@ onMounted(() => {
 </script>
 <template>
     <div
-        class="scrollbar-style h-[calc(100vh-12rem)] w-full space-y-6 overflow-y-auto rounded-[24px] bg-[#1D1512] text-[#FFFF]">
+        class="scrollbar-style h-[calc(100vh-12rem)] w-full space-y-6 overflow-y-auto rounded-[24px] bg-[#1D1512] text-[#FFFF]"
+    >
         <div class="relative h-96 items-center">
-            <img :src="artistData.avatar_path" alt="" class="absolute z-0 h-full w-full object-cover" />
+            <img
+                :src="artistData.avatar_path"
+                alt=""
+                class="absolute z-0 h-full w-full object-cover"
+            />
 
-            <div class="relative z-10 flex h-full flex-col justify-end space-y-2 p-16">
+            <div
+                class="relative z-10 flex h-full flex-col justify-end space-y-2 p-16"
+            >
                 <p class="flex text-lg font-semibold">
-                    <Icon icon="mdi:check-decagram" class="mr-2 text-2xl text-blue-500" />
+                    <Icon
+                        icon="mdi:check-decagram"
+                        class="mr-2 text-2xl text-blue-500"
+                    />
                     Nghệ sĩ được xác minh
                 </p>
                 <h1 class="text-8xl font-black">{{ artistData.name }}</h1>
@@ -156,43 +178,64 @@ onMounted(() => {
                     <div class="mb-5 flex items-center space-x-6">
                         <button
                             class="group flex h-14 w-14 items-center justify-center rounded-full transition hover:bg-black"
-                            :style="{ backgroundColor: useView.currentColor }">
-                            <Icon icon="mdi:play" class="ml-0.5 text-5xl text-black group-hover:text-white" @click="
-                                useSong.addAndPlayThisPlaylist(
+                            :style="{ backgroundColor: useView.currentColor }"
+                        >
+                            <Icon
+                                icon="mdi:play"
+                                class="ml-0.5 text-5xl text-black group-hover:text-white"
+                                @click="
+                                    useSong.addAndPlayThisPlaylist(
+                                        thisArtistListSong,
+                                    )
+                                "
+                            />
+                        </button>
+                        <button
+                            @click.stop="
+                                useSong.addPlaylistToWaitlist(
                                     thisArtistListSong,
                                 )
-                                " />
-                        </button>
-                        <button @click.stop="
-                            useSong.addPlaylistToWaitlist(
-                                thisArtistListSong,
-                            )
-                            " class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
-                            <Icon icon="material-symbols:home-storage-outline" class="text-5xl" />
+                            "
+                            class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5"
+                        >
+                            <Icon
+                                icon="material-symbols:home-storage-outline"
+                                class="text-5xl"
+                            />
                         </button>
 
                         <div v-if="!isMe">
-                            <button v-if="!isFollowed" @click="followThisArtist"
+                            <button
+                                v-if="!isFollowed"
+                                @click="followThisArtist"
                                 class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:scale-110 hover:text-black"
                                 :style="{
                                     borderColor: useView.currentColor,
                                     color: useView.currentColor,
                                     '--scroll-color': useView.currentColor,
-                                }">
+                                }"
+                            >
                                 Theo dõi
                             </button>
-                            <button v-else @click="unfollowThisArtist"
-                                class="rounded-full border px-4 py-2 text-sm font-semibold hover:scale-110" :style="{
+                            <button
+                                v-else
+                                @click="unfollowThisArtist"
+                                class="rounded-full border px-4 py-2 text-sm font-semibold hover:scale-110"
+                                :style="{
                                     borderColor: useView.currentColor,
                                     color: useView.currentColor,
-                                }">
+                                }"
+                            >
                                 Hủy theo dõi
                             </button>
                         </div>
                     </div>
                     <div>
-                        <button v-if="!isMe" @click="blockThisArtist"
-                            class="rounded-full border border-red-500 px-4 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-500 hover:text-black">
+                        <button
+                            v-if="!isMe"
+                            @click="blockThisArtist"
+                            class="rounded-full border border-red-500 px-4 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-500 hover:text-black"
+                        >
                             Hạn chế nghệ sĩ
                         </button>
                     </div>
@@ -201,24 +244,38 @@ onMounted(() => {
                 <div class="w-full" v-if="thisArtistListSong.length > 0">
                     <h2 class="pl-14 text-2xl font-semibold">Phổ biến</h2>
                     <div class="px-12">
-                        <div v-for="(item, index) in thisArtistListSong" :key="item.id"
+                        <div
+                            v-for="(item, index) in thisArtistListSong"
+                            :key="item.id"
                             @click="useSong.playThisSong(item)"
-                            class="flex cursor-pointer items-center justify-between rounded-lg py-2 pr-4 transition hover:bg-[#2a1d18]">
+                            class="flex cursor-pointer items-center justify-between rounded-lg py-2 pr-4 transition hover:bg-[#2a1d18]"
+                        >
                             <div class="flex items-center space-x-4">
                                 <span class="w-5 text-right text-white">{{
                                     ++index
                                 }}</span>
-                                <img class="h-16 w-16 rounded-md object-cover" :src="item.thumbnail_path" />
+                                <img
+                                    class="h-16 w-16 rounded-md object-cover"
+                                    :src="item.thumbnail_path"
+                                />
                                 <span class="font-medium text-white">{{
                                     item.name
                                 }}</span>
                             </div>
-                            <div class="flex items-center space-x-8 text-sm text-white">
+                            <div
+                                class="flex items-center space-x-8 text-sm text-white"
+                            >
                                 <span>{{ item.total_played }} lượt nghe</span>
-                                <button @click.stop="
-                                    useSong.addSongToWaitlist(item)
-                                    " class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
-                                    <Icon icon="material-symbols:home-storage-outline" class="text-2xl" />
+                                <button
+                                    @click.stop="
+                                        useSong.addSongToWaitlist(item)
+                                    "
+                                    class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5"
+                                >
+                                    <Icon
+                                        icon="material-symbols:home-storage-outline"
+                                        class="text-2xl"
+                                    />
                                 </button>
                             </div>
                         </div>
@@ -232,9 +289,12 @@ onMounted(() => {
                 </h2>
                 <div class="">
                     <div
-                        class="relative mb-3 flex h-[30rem] w-full cursor-pointer flex-col justify-end overflow-hidden rounded-3xl p-12 duration-200 ease-in-out hover:scale-[102%]">
-                        <img class="absolute inset-0 h-full w-full rounded-3xl object-cover"
-                            :src="artistData.avatar_path" />
+                        class="relative mb-3 flex h-[30rem] w-full cursor-pointer flex-col justify-end overflow-hidden rounded-3xl p-12 duration-200 ease-in-out hover:scale-[102%]"
+                    >
+                        <img
+                            class="absolute inset-0 h-full w-full rounded-3xl object-cover"
+                            :src="artistData.avatar_path"
+                        />
                         <div class="relative z-10">
                             <p class="text-2xl font-semibold text-white">
                                 {{ artistData.followers }} người theo dõi trên
@@ -255,15 +315,21 @@ onMounted(() => {
 
                 <div class="scrollbar-style w-full overflow-x-auto">
                     <div class="flex w-max space-x-4 px-1 py-2">
-                        <div v-for="item in thisArtistListAlbum" :key="item.id"
+                        <div
+                            v-for="item in thisArtistListAlbum"
+                            :key="item.id"
                             class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105"
                             @click="
                                 useView.selectItem(item);
-                            useView.setComponent('PlaylistPage');
-                            useView.setPlaylistData(item);
-                            ">
+                                useView.setComponent('PlaylistPage');
+                                useView.setPlaylistData(item);
+                            "
+                        >
                             <div class="mb-2 h-48 w-48 rounded-xl bg-zinc-700">
-                                <img class="h-full w-full rounded-xl object-cover" :src="item.thumbnail_path" />
+                                <img
+                                    class="h-full w-full rounded-xl object-cover"
+                                    :src="item.thumbnail_path"
+                                />
                             </div>
                             <p class="text-xl font-semibold">{{ item.name }}</p>
                             <p class="text-sm">
@@ -277,10 +343,3 @@ onMounted(() => {
         </div>
     </div>
 </template>
-
-<style>
-.scrollbar-style {
-    scrollbar-width: medium;
-    scrollbar-color: #d3d3d3 transparent;
-}
-</style>

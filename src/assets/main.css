@@ -6,3 +6,8 @@ body {
     background-color: black;
     font-family: 'Montserrat Variable', sans-serif;
 }
+
+.scrollbar-style {
+    scrollbar-width: medium;
+    scrollbar-color: #373230 transparent;
+}
