@@ -100,6 +100,24 @@ async function handleLoading() {
     isLoading.value = false;
 }
 
+const trackDurations = ref({});
+function caculateTrackTime(song_path, songId) {
+    if (trackDurations.value[songId]) {
+        return trackDurations.value[songId];
+    }
+
+    const audio = new Audio(song_path);
+    audio.addEventListener('loadedmetadata', function () {
+        const duration = audio.duration;
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        trackDurations.value[songId] =
+            minutes + ':' + seconds.toString().padStart(2, '0');
+    });
+
+    return '--:--';
+}
+
 onMounted(() => {
     handleLoading();
 });
@@ -144,15 +162,20 @@ onMounted(() => {
                                 {{ item.total_played }} lượt nghe
                             </p>
                         </div>
-                        <button
-                            @click.stop="useSong.addSongToWaitlist(item)"
-                            class="rounded p-2 text-[#FFE5D6]/50 hover:bg-white/5"
-                        >
-                            <Icon
-                                icon="material-symbols:home-storage-outline"
-                                class="text-2xl"
-                            />
-                        </button>
+                        <div class="flex items-center justify-center">
+                            <div class="mx-5 text-xs text-gray-400">
+                                {{ caculateTrackTime(item.song_path, item.id) }}
+                            </div>
+                            <button
+                                @click.stop="useSong.addSongToWaitlist(item)"
+                                class="rounded p-2 text-[#FFE5D6]/50 hover:bg-white/5"
+                            >
+                                <Icon
+                                    icon="material-symbols:home-storage-outline"
+                                    class="text-2xl"
+                                />
+                            </button>
+                        </div>
                     </div>
                     <div
                         v-if="isLoading"
@@ -452,15 +475,20 @@ onMounted(() => {
                                 {{ item.total_played }} lượt nghe
                             </p>
                         </div>
-                        <button
-                            @click.stop="useSong.addSongToWaitlist(item)"
-                            class="rounded p-2 text-[#FFE5D6]/50 hover:bg-white/5"
-                        >
-                            <Icon
-                                icon="material-symbols:home-storage-outline"
-                                class="text-2xl"
-                            />
-                        </button>
+                        <div class="flex items-center justify-center">
+                            <div class="mx-5 text-xs text-gray-400">
+                                {{ caculateTrackTime(item.song_path, item.id) }}
+                            </div>
+                            <button
+                                @click.stop="useSong.addSongToWaitlist(item)"
+                                class="rounded p-2 text-[#FFE5D6]/50 hover:bg-white/5"
+                            >
+                                <Icon
+                                    icon="material-symbols:home-storage-outline"
+                                    class="text-2xl"
+                                />
+                            </button>
+                        </div>
                     </div>
                     <div
                         v-if="isLoading"
