@@ -105,28 +105,42 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="h-full w-full space-y-6 rounded-[24px] bg-[#1D1512] text-[#FFFF]">
-        <div class="scrollbar-style h-[calc(100vh-12rem)] overflow-auto px-8 py-8">
-
-            <div class="mb-8 text-[#FFE5D6]">
+    <div
+        class="h-full w-full space-y-6 rounded-[24px] bg-[#1D1512] text-[#FFFF]"
+    >
+        <div
+            class="scrollbar-style h-[calc(100vh-12rem)] overflow-auto px-8 py-8"
+        >
+            <div v-if="interestSongs.length > 0" class="mb-8 text-[#FFE5D6]">
                 <h2 class="mb-1 text-2xl font-semibold">
                     Bài hát phù hợp với bạn
                 </h2>
                 <div class="scrollbar-style flex space-x-4 overflow-x-auto">
                     <div class="flex w-max space-x-4 px-1 py-2">
-                        <div v-for="item in interestSongs" :key="item.id"
+                        <div
+                            v-for="item in interestSongs"
+                            :key="item.id"
                             class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
-                            @click="useSong.playOrPauseThisSong(item)">
-                            <div class="mb-2 h-40 w-40 rounded-full bg-zinc-700">
-                                <img class="h-40 w-40 rounded-full object-cover" :src="item.thumbnail_path" alt=""
+                            @click="useSong.playOrPauseThisSong(item)"
+                        >
+                            <div
+                                class="mb-2 h-40 w-40 rounded-full bg-zinc-700"
+                            >
+                                <img
+                                    class="h-40 w-40 rounded-full object-cover"
+                                    :src="item.thumbnail_path"
+                                    alt=""
                                     :class="{
                                         'animate-spin':
                                             currentTrack.id == item.id &&
                                             isPlaying,
-                                    }" style="animation-duration: 5s" @error="
+                                    }"
+                                    style="animation-duration: 5s"
+                                    @error="
                                         (event) =>
                                             (event.target.src = defaultImgage)
-                                    " />
+                                    "
+                                />
                             </div>
                             <div class="flex justify-between">
                                 <div>
@@ -135,21 +149,35 @@ onMounted(() => {
                                         {{ item.total_played }} lượt nghe
                                     </p>
                                 </div>
-                                <button @click.stop="
-                                    useSong.addSongToWaitlist(item)
-                                    " class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
-                                    <Icon icon="material-symbols:home-storage-outline" class="text-2xl" />
+                                <button
+                                    @click.stop="
+                                        useSong.addSongToWaitlist(item)
+                                    "
+                                    class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5"
+                                >
+                                    <Icon
+                                        icon="material-symbols:home-storage-outline"
+                                        class="text-2xl"
+                                    />
                                 </button>
                             </div>
                         </div>
 
-                        <div v-if="isLoading"
-                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
-                            <div class="mb-2 h-40 w-40 rounded-full bg-zinc-700"></div>
+                        <div
+                            v-if="isLoading"
+                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                        >
+                            <div
+                                class="mb-2 h-40 w-40 rounded-full bg-zinc-700"
+                            ></div>
                             <div class="flex justify-between">
                                 <div>
-                                    <div class="my-2 h-5 w-24 rounded bg-zinc-700"></div>
-                                    <div class="my-2 h-5 w-28 rounded bg-zinc-700"></div>
+                                    <div
+                                        class="my-2 h-5 w-24 rounded bg-zinc-700"
+                                    ></div>
+                                    <div
+                                        class="my-2 h-5 w-28 rounded bg-zinc-700"
+                                    ></div>
                                 </div>
                             </div>
                         </div>
@@ -157,32 +185,46 @@ onMounted(() => {
                 </div>
             </div>
 
-
             <div class="mb-8 text-[#FFE5D6]">
                 <h2 class="mb-1 text-2xl font-semibold">Album phổ biến</h2>
                 <div class="scrollbar-style flex space-x-4 overflow-x-auto">
                     <div class="flex w-max space-x-4 px-1 py-2">
-                        <div v-for="item in popularAlbum" :key="popularAlbum.id"
-                            class="group relative w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
-                            <div @click="
-                                useView.selectItem(item);
-                            useView.setComponent('PlaylistPage');
-                            useView.setPlaylistData(item);
-                            ">
-                                <div class="mb-2 h-48 w-48 rounded-xl bg-zinc-700">
-                                    <img class="h-48 w-48 rounded-xl object-cover" :src="item.thumbnail_path" alt=""
+                        <div
+                            v-for="item in popularAlbum"
+                            :key="popularAlbum.id"
+                            class="group relative w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                        >
+                            <div
+                                @click="
+                                    useView.selectItem(item);
+                                    useView.setComponent('PlaylistPage');
+                                    useView.setPlaylistData(item);
+                                "
+                            >
+                                <div
+                                    class="mb-2 h-48 w-48 rounded-xl bg-zinc-700"
+                                >
+                                    <img
+                                        class="h-48 w-48 rounded-xl object-cover"
+                                        :src="item.thumbnail_path"
+                                        alt=""
                                         @error="
                                             (event) =>
-                                            (event.target.src =
-                                                defaultImgage)
-                                        " />
+                                                (event.target.src =
+                                                    defaultImgage)
+                                        "
+                                    />
                                 </div>
                                 <button
                                     class="absolute bottom-16 right-1 flex h-14 w-14 translate-y-2 transform items-center justify-center rounded-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:scale-105 hover:bg-black hover:brightness-110"
                                     :style="{
                                         backgroundColor: useView.currentColor,
-                                    }" @click.stop="playThisAlbum(item.id)">
-                                    <span class="ml-0.5 text-3xl text-black">▶</span>
+                                    }"
+                                    @click.stop="playThisAlbum(item.id)"
+                                >
+                                    <span class="ml-0.5 text-3xl text-black"
+                                        >▶</span
+                                    >
                                 </button>
                                 <p class="font-medium">{{ item.name }}</p>
                                 <p class="text-sm">
@@ -191,12 +233,20 @@ onMounted(() => {
                             </div>
                         </div>
 
-                        <div v-if="isLoading"
-                            class="group relative w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
+                        <div
+                            v-if="isLoading"
+                            class="group relative w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                        >
                             <div>
-                                <div class="mb-2 h-48 w-48 rounded-xl bg-zinc-700"></div>
-                                <div class="my-2 h-5 w-28 rounded bg-zinc-700"></div>
-                                <div class="my-2 h-5 w-24 rounded bg-zinc-700"></div>
+                                <div
+                                    class="mb-2 h-48 w-48 rounded-xl bg-zinc-700"
+                                ></div>
+                                <div
+                                    class="my-2 h-5 w-28 rounded bg-zinc-700"
+                                ></div>
+                                <div
+                                    class="my-2 h-5 w-24 rounded bg-zinc-700"
+                                ></div>
                             </div>
                         </div>
                     </div>
@@ -209,20 +259,31 @@ onMounted(() => {
                 </h2>
                 <div class="scrollbar-style flex space-x-4 overflow-x-auto">
                     <div class="flex w-max space-x-4 px-1 py-2">
-                        <div v-for="item in topArtist" :key="item.id"
-                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
-                            <div @click="
-                                useView.selectItem(item);
-                            useView.setComponent('ArtistPage');
-                            useView.setArtistData(item);
-                            ">
-                                <div class="mb-2 h-48 w-48 rounded-full bg-zinc-700">
-                                    <img class="h-48 w-48 rounded-full object-cover" :src="item.avatar_path" alt=""
+                        <div
+                            v-for="item in topArtist"
+                            :key="item.id"
+                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                        >
+                            <div
+                                @click="
+                                    useView.selectItem(item);
+                                    useView.setComponent('ArtistPage');
+                                    useView.setArtistData(item);
+                                "
+                            >
+                                <div
+                                    class="mb-2 h-48 w-48 rounded-full bg-zinc-700"
+                                >
+                                    <img
+                                        class="h-48 w-48 rounded-full object-cover"
+                                        :src="item.avatar_path"
+                                        alt=""
                                         @error="
                                             (event) =>
-                                            (event.target.src =
-                                                defaultImgage)
-                                        " />
+                                                (event.target.src =
+                                                    defaultImgage)
+                                        "
+                                    />
                                 </div>
                                 <p class="font-medium">{{ item.name }}</p>
                                 <p class="text-sm">
@@ -231,12 +292,20 @@ onMounted(() => {
                             </div>
                         </div>
 
-                        <div v-if="isLoading"
-                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
+                        <div
+                            v-if="isLoading"
+                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                        >
                             <div>
-                                <div class="mb-2 h-48 w-48 rounded-full bg-zinc-700"></div>
-                                <div class="my-2 h-5 w-24 rounded bg-zinc-700"></div>
-                                <div class="my-2 h-5 w-28 rounded bg-zinc-700"></div>
+                                <div
+                                    class="mb-2 h-48 w-48 rounded-full bg-zinc-700"
+                                ></div>
+                                <div
+                                    class="my-2 h-5 w-24 rounded bg-zinc-700"
+                                ></div>
+                                <div
+                                    class="my-2 h-5 w-28 rounded bg-zinc-700"
+                                ></div>
                             </div>
                         </div>
                     </div>
@@ -249,19 +318,30 @@ onMounted(() => {
                 </h2>
                 <div class="scrollbar-style flex space-x-4 overflow-x-auto">
                     <div class="flex w-max space-x-4 px-1 py-2">
-                        <div v-for="item in topSong" :key="item.id"
+                        <div
+                            v-for="item in topSong"
+                            :key="item.id"
                             class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
-                            @click="useSong.playOrPauseThisSong(item)">
-                            <div class="mb-2 h-40 w-40 rounded-full bg-zinc-700">
-                                <img class="h-40 w-40 rounded-full object-cover" :src="item.thumbnail_path" alt=""
+                            @click="useSong.playOrPauseThisSong(item)"
+                        >
+                            <div
+                                class="mb-2 h-40 w-40 rounded-full bg-zinc-700"
+                            >
+                                <img
+                                    class="h-40 w-40 rounded-full object-cover"
+                                    :src="item.thumbnail_path"
+                                    alt=""
                                     :class="{
                                         'animate-spin':
                                             currentTrack.id == item.id &&
                                             isPlaying,
-                                    }" style="animation-duration: 5s" @error="
+                                    }"
+                                    style="animation-duration: 5s"
+                                    @error="
                                         (event) =>
                                             (event.target.src = defaultImgage)
-                                    " />
+                                    "
+                                />
                             </div>
                             <div class="flex justify-between">
                                 <div>
@@ -270,21 +350,35 @@ onMounted(() => {
                                         {{ item.total_played }} lượt nghe
                                     </p>
                                 </div>
-                                <button @click.stop="
-                                    useSong.addSongToWaitlist(item)
-                                    " class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
-                                    <Icon icon="material-symbols:home-storage-outline" class="text-2xl" />
+                                <button
+                                    @click.stop="
+                                        useSong.addSongToWaitlist(item)
+                                    "
+                                    class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5"
+                                >
+                                    <Icon
+                                        icon="material-symbols:home-storage-outline"
+                                        class="text-2xl"
+                                    />
                                 </button>
                             </div>
                         </div>
 
-                        <div v-if="isLoading"
-                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105">
-                            <div class="mb-2 h-40 w-40 rounded-full bg-zinc-700"></div>
+                        <div
+                            v-if="isLoading"
+                            class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
+                        >
+                            <div
+                                class="mb-2 h-40 w-40 rounded-full bg-zinc-700"
+                            ></div>
                             <div class="flex justify-between">
                                 <div>
-                                    <div class="my-2 h-5 w-24 rounded bg-zinc-700"></div>
-                                    <div class="my-2 h-5 w-28 rounded bg-zinc-700"></div>
+                                    <div
+                                        class="my-2 h-5 w-24 rounded bg-zinc-700"
+                                    ></div>
+                                    <div
+                                        class="my-2 h-5 w-28 rounded bg-zinc-700"
+                                    ></div>
                                 </div>
                             </div>
                         </div>
