@@ -84,7 +84,8 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div v-if="notHaveSong" class="my-1 flex cursor-pointer justify-between text-nowrap text-xl hover:bg-[#3E3D3D]"
+    <div v-if="notHaveSong"
+        class="my-1 flex cursor-pointer justify-between text-nowrap text-xl dark:hover:bg-[#3E3D3D] hover:bg-gray-100"
         @click="addSongToPlaylist">
         <div class="px-3 py-2 text-xs">
             {{ item.name }}

@@ -172,13 +172,14 @@ onMounted(async () => {
                         <div v-for="item in interestSongs.slice(0, 5)" :key="item.id"
                             class="flex cursor-pointer items-center rounded-lg p-3 duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-white/5"
                             @click="useSong.playOrPauseThisSong(item)">
-                            <img class="h-14 w-14 object-cover transition-all duration-300" :class="{
-                                'animate-spin rounded-full':
-                                    currentTrack.id == item.id && isPlaying,
-                                'rounded-md': !(
-                                    currentTrack.id == item.id && isPlaying
-                                ),
-                            }" :src="item.thumbnail_path" alt="" style="animation-duration: 5s" @error="
+                            <img class="h-14 w-14 object-cover transition-all duration-300 ring-1 ring-zinc-300 dark:ring-zinc-600"
+                                :class="{
+                                    'animate-spin rounded-full':
+                                        currentTrack.id == item.id && isPlaying,
+                                    'rounded-md': !(
+                                        currentTrack.id == item.id && isPlaying
+                                    ),
+                                }" :src="item.thumbnail_path" alt="" style="animation-duration: 5s" @error="
                                 (event) =>
                                     (event.target.src = defaultImgage)
                             " />
@@ -238,7 +239,8 @@ onMounted(async () => {
                                     );
                                     useView.setPlaylistData(item);
                                     ">
-                                        <div class="mb-2 h-48 w-48 rounded-xl bg-gray-200 dark:bg-zinc-700">
+                                        <div
+                                            class="mb-2 h-48 w-48 rounded-xl bg-gray-200 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">
                                             <img class="h-48 w-48 rounded-xl object-cover" :src="item.thumbnail_path"
                                                 alt="" @error="
                                                     (event) =>
@@ -286,16 +288,17 @@ onMounted(async () => {
                         <div v-for="item in recentRotation.slice(0, 5)" :key="item.id"
                             class="flex cursor-pointer items-center rounded-lg p-3 duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-white/5"
                             @click="useSong.playOrPauseThisSong(item)">
-                            <img class="h-14 w-14 object-cover transition-all duration-300" :class="{
-                                'animate-spin rounded-full':
-                                    currentTrack.id == item.id && isPlaying,
-                                'rounded-md': !(
-                                    currentTrack.id == item.id && isPlaying
-                                ),
-                            }" :src="item.thumbnail_path" alt="" style="animation-duration: 5s" @error="
-                                (event) =>
-                                    (event.target.src = defaultImgage)
-                            " />
+                            <img class="h-14 w-14 object-cover transition-all duration-300 ring-1 ring-zinc-300 dark:ring-zinc-600"
+                                :class="{
+                                    'animate-spin rounded-full':
+                                        currentTrack.id == item.id && isPlaying,
+                                    'rounded-md': !(
+                                        currentTrack.id == item.id && isPlaying
+                                    ),
+                                }" :src="item.thumbnail_path" alt="" style="animation-duration: 5s" @error="
+                                    (event) =>
+                                        (event.target.src = defaultImgage)
+                                " />
                             <div class="ml-4 flex-1">
                                 <p class="font-medium">{{ item.name }}</p>
                                 <p class="text-sm text-gray-600 dark:text-[#FFE5D6]/70">
@@ -386,7 +389,8 @@ onMounted(async () => {
                                     useView.setComponent('ArtistPage');
                                     useView.setArtistData(item);
                                     ">
-                                    <div class="mb-2 h-48 w-48 rounded-full bg-gray-200 dark:bg-zinc-700">
+                                    <div
+                                        class="mb-2 h-48 w-48 rounded-full bg-gray-200 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">
                                         <img class="h-48 w-48 rounded-full object-cover" :src="item.avatar_path" alt=""
                                             @error="
                                                 (event) =>
@@ -426,7 +430,8 @@ onMounted(async () => {
                                 <div v-for="item in topSong.slice(0, 6)" :key="item.id"
                                     class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105 hover:brightness-105"
                                     @click="useSong.playOrPauseThisSong(item)">
-                                    <div class="mb-2 h-40 w-40 rounded-full bg-gray-200 dark:bg-zinc-700">
+                                    <div
+                                        class="mb-2 h-40 w-40 rounded-full bg-gray-200 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">
                                         <img class="h-40 w-40 rounded-full object-cover" :src="item.thumbnail_path"
                                             alt="" :class="{
                                                 'animate-spin':

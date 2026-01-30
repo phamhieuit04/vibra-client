@@ -151,9 +151,12 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60">
-        <div class="relative w-[900px] rounded-lg bg-[#1D1512] p-6 text-white">
-            <button class="absolute right-4 top-4 text-white hover:text-red-500" @click="openUploadSong = false">
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 dark:bg-black/60">
+        <div class="relative w-[900px] rounded-xl
+                   bg-[#F5F5F4] p-6 text-[#1A1A1A]
+                   dark:bg-[#1D1512] dark:text-white">
+            <button class="absolute right-4 top-4 text-gray-600 hover:text-red-500
+                       dark:text-white" @click="openUploadSong = false">
                 ✕
             </button>
 
@@ -161,20 +164,26 @@ onMounted(() => {
                 Đăng tải bài hát
             </h2>
 
-            <div class="mb-3 flex gap-1">
-                <div
-                    class="group relative flex h-80 w-80 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-zinc-700">
+            <div class="mb-3 flex gap-3">
+                <div class="group relative flex h-80 w-80 shrink-0 cursor-pointer
+                           items-center justify-center rounded-xl
+                           bg-gray-200 dark:bg-zinc-700">
                     <img class="h-full w-full rounded-xl object-cover" :src="previewImg ? previewImg : defaultImgage"
                         @error="(event) => (event.target.src = defaultImgage)" alt="" />
-                    <div class="absolute inset-0 flex items-center justify-center rounded-xl bg-black bg-opacity-50 opacity-0 transition group-hover:opacity-100"
-                        @click="chooseImg">
-                        <Icon icon="material-symbols:edit-rounded text-black " />
+                    <div class="absolute inset-0 flex items-center justify-center
+                               rounded-xl bg-black/40 opacity-0 transition
+                               group-hover:opacity-100" @click="chooseImg">
+                        <Icon icon="material-symbols:edit-rounded" class="text-white" />
                         <input type="file" accept="image/*" ref="fileInput" style="display: none"
                             @change="onImgChoosed" />
                     </div>
                 </div>
-                <div class="ml-2 flex-1">
-                    <button @click="chooseSong" class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white">
+
+                <div class="flex-1">
+                    <button @click="chooseSong" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               transition hover:bg-gray-200
+                               dark:bg-[#25211F] dark:text-white dark:hover:bg-[#2e2a28]">
                         {{
                             selectedSongFile
                                 ? selectedSongFile.name
@@ -183,42 +192,63 @@ onMounted(() => {
                     </button>
                     <input type="file" ref="songInput" accept="audio/*" @change="onSongChoosed" class="hidden" />
 
-                    <textarea v-model="songDescrip" rows="5"
-                        class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white"
+                    <textarea v-model="songDescrip" rows="5" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               placeholder-gray-400
+                               focus:outline-none
+                               dark:bg-[#25211F] dark:text-white dark:placeholder-gray-400"
                         placeholder="Mô tả bài hát..."></textarea>
-                    <input v-model="songPrice" type="number"
-                        class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white" placeholder="Giá bài hát" />
+
+                    <input v-model="songPrice" type="number" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               placeholder-gray-400
+                               focus:outline-none
+                               dark:bg-[#25211F] dark:text-white dark:placeholder-gray-400"
+                        placeholder="Giá bài hát" />
 
                     <div class="mb-3 grid grid-cols-3 gap-4">
                         <div class="relative">
-                            <button @click="toggleCateDropdown"
-                                class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white">
+                            <button @click="toggleCateDropdown" class="mb-3 w-full rounded-lg
+                                       bg-white px-4 py-3 text-[#1A1A1A]
+                                       transition hover:bg-gray-200
+                                       dark:bg-[#25211F] dark:text-white dark:hover:bg-[#2e2a28]">
                                 {{ selectedCategoryName || 'Chọn thể loại' }}
                             </button>
-                            <ul v-if="showCateDropdown"
-                                class="scrollbar-style absolute z-10 ml-5 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-gray-400 bg-[#25211F] shadow-md">
-                                <li v-for="cate in allCategories" :key="cate.id" @click="selectCategory(cate)"
-                                    class="cursor-pointer rounded-lg px-4 py-3 hover:bg-gray-500">
+                            <ul v-if="showCateDropdown" class="scrollbar-style absolute z-10 mt-1 max-h-72 w-full
+                                       overflow-auto rounded-lg border
+                                       border-gray-300 bg-white
+                                       dark:border-gray-600 dark:bg-[#25211F]">
+                                <li v-for="cate in allCategories" :key="cate.id" @click="selectCategory(cate)" class="cursor-pointer rounded-lg px-4 py-3
+                                           hover:bg-gray-200
+                                           dark:hover:bg-[#3a3533]">
                                     {{ cate.name }}
                                 </li>
                             </ul>
                         </div>
 
                         <div class="relative">
-                            <button @click="toggleAlbumDropdown"
-                                class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white">
+                            <button @click="toggleAlbumDropdown" class="mb-3 w-full rounded-lg
+                                       bg-white px-4 py-3 text-[#1A1A1A]
+                                       transition hover:bg-gray-200
+                                       dark:bg-[#25211F] dark:text-white dark:hover:bg-[#2e2a28]">
                                 {{ selectedAlbumName || 'Chọn album' }}
                             </button>
-                            <ul v-if="showAlbumDropdown"
-                                class="scrollbar-style absolute z-10 ml-5 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-gray-400 bg-[#25211F] shadow-md">
-                                <li v-for="album in myAlbumList" :key="album.id" @click="selectAlbum(album)"
-                                    class="cursor-pointer rounded-lg px-4 py-3 hover:bg-gray-500">
+                            <ul v-if="showAlbumDropdown" class="scrollbar-style absolute z-10 mt-1 max-h-72 w-full
+                                       overflow-auto rounded-lg border
+                                       border-gray-300 bg-white
+                                       dark:border-gray-600 dark:bg-[#25211F]">
+                                <li v-for="album in myAlbumList" :key="album.id" @click="selectAlbum(album)" class="cursor-pointer rounded-lg px-4 py-3
+                                           hover:bg-gray-200
+                                           dark:hover:bg-[#3a3533]">
                                     {{ album.name }}
                                 </li>
                             </ul>
                         </div>
 
-                        <button @click="chooseTxt" class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white">
+                        <button @click="chooseTxt" class="mb-3 w-full rounded-lg
+                                   bg-white px-4 py-3 text-[#1A1A1A]
+                                   transition hover:bg-gray-200
+                                   dark:bg-[#25211F] dark:text-white dark:hover:bg-[#2e2a28]">
                             {{
                                 selectedTxtFile
                                     ? selectedTxtFile.name
@@ -229,21 +259,22 @@ onMounted(() => {
                     </div>
 
                     <div class="mt-4 flex justify-end space-x-4">
-                        <button
-                            class="rounded-3xl bg-gray-600 px-7 py-2 font-semibold text-white transition hover:bg-gray-500"
+                        <button class="rounded-3xl bg-gray-300 px-7 py-2 font-semibold
+                                   text-[#1A1A1A] transition hover:bg-gray-400
+                                   dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
                             @click="openUploadSong = false">
                             Hủy
                         </button>
-                        <button
-                            class="ml-4 rounded-3xl px-7 py-2 font-semibold text-white transition hover:brightness-125"
-                            :style="{ backgroundColor: useView.currentColor }" @click="uploadSong">
+                        <button class="rounded-3xl px-7 py-2 font-semibold text-white
+                                   transition hover:brightness-110" :style="{ backgroundColor: useView.currentColor }"
+                            @click="uploadSong">
                             Lưu
                         </button>
                     </div>
                 </div>
             </div>
 
-            <p class="mt-4 text-xs text-gray-400">
+            <p class="mt-4 text-xs text-gray-500 dark:text-gray-400">
                 Bằng cách tiếp tục, bạn đồng ý cho phép TÔI truy cập vào hình
                 ảnh bạn đã chọn để tải lên. Vui lòng đảm bảo bạn có quyền tải
                 lên hình ảnh.

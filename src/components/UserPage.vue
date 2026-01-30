@@ -143,12 +143,13 @@ onMounted(() => {
                                 useView.setComponent('PlaylistPage');
                                 useView.setPlaylistData(item);
                                 ">
-                            <div class="mb-2 h-48 w-full rounded
-                                       bg-zinc-300 dark:bg-zinc-700">
-                                <img class="h-full w-full rounded-xl object-cover" :src="item.thumbnail_path"
+                            <div class="mb-2 h-48 w-full rounded-xl
+                                bg-zinc-200 dark:bg-zinc-700
+                                ring-1 ring-zinc-300 dark:ring-zinc-600
+                                overflow-hidden">
+                                <img class="h-full w-full object-cover" :src="item.thumbnail_path"
                                     @error="(event) => (event.target.src = defaultImgage)" />
                             </div>
-
                             <div class="flex justify-between">
                                 <div>
                                     <p class="text-lg font-medium">
@@ -215,13 +216,14 @@ onMounted(() => {
                 <div class="scrollbar-style overflow-x-auto">
                     <div class="flex w-max space-x-7 px-1 py-2">
                         <div v-for="item in myPlaylistList" :key="item.id" class="group w-32 flex-shrink-0 cursor-pointer
-                       transition-all duration-200 ease-in-out
-                       hover:scale-105 hover:brightness-105" @click="
-                        useView.selectItem(item);
-                    useView.setComponent('PlaylistPage');
-                    useView.setPlaylistData(item);
-                    ">
-                            <div class="mb-2 h-32 w-full rounded-xl overflow-hidden bg-zinc-300 dark:bg-zinc-700">
+                        transition-all duration-200 ease-in-out
+                        hover:scale-105 hover:brightness-105" @click="
+                            useView.selectItem(item);
+                        useView.setComponent('PlaylistPage');
+                        useView.setPlaylistData(item);
+                        ">
+                            <div
+                                class="mb-2 h-32 w-full rounded-xl overflow-hidden bg-zinc-300 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">
                                 <img img class="h-full w-full object-cover" :src="item.thumbnail_path"
                                     @error="(event) => (event.target.src = defaultImgage)" />
                             </div>
@@ -250,7 +252,7 @@ onMounted(() => {
                     useView.setArtistData(item.artist);
                     ">
                             <div class="mb-5 h-32 w-32 rounded-full
-                           bg-zinc-300 dark:bg-zinc-700">
+                           bg-zinc-300 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">
                                 <img class="h-full w-full rounded-full object-cover" :src="item.artist.avatar_path"
                                     @error="(event) => (event.target.src = defaultImgage)" />
                             </div>
@@ -310,15 +312,24 @@ onMounted(() => {
                                 <td class="px-4 py-3 text-zinc-600 dark:text-[#B0B0B0]">
                                     {{ item.playlist_id ? 'Album' : 'Bài hát' }}
                                 </td>
-                                <td class="px-4 py-3 font-medium" :class="{
-                                    'text-green-600 dark:text-green-500': item.status == 2,
-                                    'text-yellow-600 dark:text-yellow-500': item.status == 1,
-                                }">
-                                    {{
-                                        item.status == 1
-                                            ? 'Thanh toán thất bại'
-                                            : 'Thanh toán thành công'
-                                    }}
+                                <td class="px-4 py-3">
+                                    <span
+                                        class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold"
+                                        :class="{
+                                            'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400': item.status == 2,
+                                            'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400': item.status == 1,
+                                        }">
+                                        <span class="h-2 w-2 rounded-full" :class="{
+                                            'bg-green-500': item.status == 2,
+                                            'bg-yellow-500': item.status == 1,
+                                        }"></span>
+
+                                        {{
+                                            item.status == 1
+                                                ? 'Thất bại'
+                                                : 'Thành công'
+                                        }}
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>

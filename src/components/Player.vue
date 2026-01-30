@@ -239,7 +239,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                 </a>
             </div>
 
-            <span v-if="openMenu" class="absolute bottom-[68px] left-[250px] z-20
+            <span v-if="openMenu" class="absolute bottom-[68px] left-[250px] z-20 drop-shadow-xl
                        bg-white p-1 text-zinc-800
                        dark:bg-[#282828] dark:text-gray-200">
                 <div class="font-semibold">

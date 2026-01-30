@@ -75,9 +75,11 @@ const saveProfile = async () => {
 };
 </script>
 <template>
-    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60">
-        <div class="relative w-[700px] rounded-lg bg-[#1D1512] p-6 text-white">
-            <button class="absolute right-4 top-4 text-white hover:text-red-500" @click="openEditProfile = false">
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 dark:bg-black/60">
+        <div class="relative w-[700px] rounded-xl bg-[#F5F5F4] p-6 text-[#1A1A1A]
+                   dark:bg-[#1D1512] dark:text-white">
+            <button class="absolute right-4 top-4 text-gray-600 hover:text-red-500
+                       dark:text-white" @click="openEditProfile = false">
                 ✕
             </button>
 
@@ -85,25 +87,37 @@ const saveProfile = async () => {
                 Chi tiết hồ sơ
             </h2>
 
-            <div class="r mb-3 flex gap-1">
-                <div
-                    class="group relative flex h-80 w-80 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-zinc-700">
+            <div class="mb-3 flex gap-3">
+                <div class="group relative flex h-80 w-80 shrink-0 cursor-pointer
+                           items-center justify-center rounded-xl
+                           bg-gray-200 dark:bg-zinc-700">
                     <img class="h-full w-full rounded-xl object-cover" :src="previewImg ? previewImg : user.avatar_path"
                         @error="(event) => (event.target.src = defaultImgage)" alt="" />
-                    <div class="absolute inset-0 flex items-center justify-center rounded-xl bg-black bg-opacity-50 opacity-0 transition group-hover:opacity-100"
-                        @click="chooseImg">
-                        <Icon icon="material-symbols:edit-rounded text-black " />
+                    <div class="absolute inset-0 flex items-center justify-center
+                               rounded-xl bg-black/40 opacity-0 transition
+                               group-hover:opacity-100" @click="chooseImg">
+                        <Icon icon="material-symbols:edit-rounded" class="text-white" />
                         <input type="file" accept="image/*" ref="fileInput" style="display: none"
                             @change="onImgChoosed" />
                     </div>
                 </div>
-                <div class="ml-2 flex-1">
-                    <input v-model="profileName" class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white"
-                        placeholder="Tên hồ sơ" />
-                    <textarea v-model="profileDescrip" rows="5"
-                        class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white"
+
+                <div class="flex-1">
+                    <input v-model="profileName" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               placeholder-gray-400
+                               focus:outline-none
+                               dark:bg-[#25211F] dark:text-white dark:placeholder-gray-400" placeholder="Tên hồ sơ" />
+                    <textarea v-model="profileDescrip" rows="5" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               placeholder-gray-400
+                               focus:outline-none
+                               dark:bg-[#25211F] dark:text-white dark:placeholder-gray-400"
                         placeholder="Mô tả bản thân..."></textarea>
-                    <select class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white" v-model="profileGender">
+                    <select v-model="profileGender" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               focus:outline-none
+                               dark:bg-[#25211F] dark:text-white">
                         <option disabled value="-- Chọn giới tính --">
                             -- Chọn giới tính --
                         </option>
@@ -111,22 +125,27 @@ const saveProfile = async () => {
                         <option value="Nữ">Nữ</option>
                         <option value="Giới tính khác">Khác</option>
                     </select>
-                    <input type="date" v-model="profileBirth"
-                        class="mb-3 w-full rounded-lg bg-[#25211F] px-4 py-3 text-white" placeholder="Ngày sinh" />
+                    <input type="date" v-model="profileBirth" class="mb-3 w-full rounded-lg
+                               bg-white px-4 py-3 text-[#1A1A1A]
+                               focus:outline-none
+                               dark:bg-[#25211F] dark:text-white" />
                 </div>
             </div>
 
             <div class="float-end">
-                <button class="rounded-3xl bg-gray-600 px-7 py-2 font-semibold text-white transition hover:bg-gray-500"
-                    @click="openEditProfile = false">
+                <button class="rounded-3xl bg-gray-300 px-7 py-2 font-semibold
+                           text-[#1A1A1A] transition hover:bg-gray-400
+                           dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500" @click="openEditProfile = false">
                     Hủy
                 </button>
-                <button class="ml-4 rounded-3xl px-7 py-2 font-semibold text-white transition hover:brightness-125"
-                    :style="{ backgroundColor: useView.currentColor }" @click="saveProfile">
+                <button class="ml-4 rounded-3xl px-7 py-2 font-semibold text-white
+                           transition hover:brightness-110" :style="{ backgroundColor: useView.currentColor }"
+                    @click="saveProfile">
                     Lưu
                 </button>
             </div>
-            <p class="mt-16 text-xs text-gray-400">
+
+            <p class="mt-16 text-xs text-gray-500 dark:text-gray-400">
                 Bằng cách tiếp tục, bạn đồng ý cho phép TÔI truy cập vào hình
                 ảnh bạn đã chọn để tải lên. Vui lòng đảm bảo bạn có quyền tải
                 lên hình ảnh.
