@@ -10,6 +10,7 @@ import { useSongStore } from '@/stores/song';
 import { useViewStore } from '@/stores/view';
 import { useModalStore } from '@/stores/modal';
 import { useActivityStore } from '@/stores/activity';
+import DarkModeToggle from './DarkModeToggle.vue';
 
 const useSong = useSongStore();
 
@@ -35,6 +36,12 @@ const colorList = ref([
     '#44B78B',
 ]);
 
+const isDarkMode = ref(false);
+
+const updateDarkMode = () => {
+    isDarkMode.value = document.documentElement.classList.contains('dark');
+};
+
 async function getAllCategories() {
     try {
         const res = await api.get('/category/index', {
@@ -56,7 +63,7 @@ async function logout() {
     try {
         const res = await api.get('/logout', {
             headers: {
-                Authorization: 'Bearer ' + this.authStore.user.token,
+                Authorization: 'Bearer ' + authStore.user.token,
             },
         });
 
@@ -87,27 +94,34 @@ onMounted(() => {
     if (useView.currentColor == null) {
         useView.currentColor = '#BC4D15';
     }
+
+    updateDarkMode();
+
+    const observer = new MutationObserver(updateDarkMode);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
 });
 </script>
 
 <template>
-    <div class="fixed right-0 z-20 flex h-[64px] w-[100%] items-center justify-between bg-[#BC4D15]"
+    <div class="fixed right-0 z-20 flex h-[64px] w-[100%] items-center justify-between px-12"
         :style="{ backgroundColor: useView.currentColor }">
-        <div class="relative ml-8 flex items-center gap-3">
-            <img class="size-20 cursor-pointer text-[64px] text-white transition duration-200 hover:text-black"
+        <div class="relative flex items-center gap-3">
+            <img class="size-20 cursor-pointer text-[64px] text-white transition duration-200 hover:opacity-80"
                 :src="LogoText" @click="
                     useView.setComponent('HomePage');
                 useView.selectItem(this);
                 " />
-            <!-- <Icon icon="tabler:poo-filled" @click="useView.setComponent('HomePage'); useView.selectItem(this)"
-				class="text-white transition duration-200 cursor-pointer size-10 hover:text-black text-[64px]" /> -->
+            <DarkModeToggle />
             <div class="relative ml-0 h-8 w-8 cursor-pointer rounded-full bg-black shadow-2xl hover:scale-105">
                 <div @click="openColorMenu = !openColorMenu"
                     class="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-gray-400"
                     :style="{ backgroundColor: useView.currentColor }"></div>
             </div>
             <div v-if="openColorMenu"
-                class="absolute left-[140px] flex h-10 items-center rounded-xl bg-black transition duration-500">
+                class="absolute left-[200px] flex h-10 items-center rounded-xl bg-white p-1 shadow-lg transition duration-500 dark:bg-black">
                 <div class="mx-2 h-6 w-6 cursor-pointer rounded-full hover:scale-110" v-for="color in colorList"
                     :style="{ backgroundColor: color }" @click="useView.setCurrentColor(color)"></div>
             </div>
@@ -121,22 +135,22 @@ onMounted(() => {
                 useView.selectItem(this);
                 searchValue = '';
                 "
-                    class="flex size-12 items-center justify-center rounded-full bg-[#1f1f1f] transition duration-200 hover:bg-[#2a2a2a]">
+                    class="flex size-12 items-center justify-center rounded-full bg-black/20 transition duration-200 hover:bg-black/30 dark:bg-[#1f1f1f] dark:hover:bg-[#2a2a2a]">
                     <Icon icon="material-symbols:home" class="size-8 cursor-pointer transition duration-200" :class="useView.currentComponent === 'HomePage'
-                        ? 'text-[#FFE5D6]'
-                        : 'text-[#FFE5D6]/30'
+                        ? 'text-white dark:text-[#FFE5D6]'
+                        : 'text-white/50 dark:text-[#FFE5D6]/30'
                         " />
                 </div>
                 <div
-                    class="flex w-96 items-center justify-between gap-3 rounded-3xl bg-[#212121] px-3 py-2 outline outline-2 transition-all duration-200 focus-within:bg-[#2a2a2a] focus-within:outline-white hover:bg-[#2a2a2a]">
-                    <div class="flex w-full items-center gap-2 border-r-2 border-[#7c7c7c]">
+                    class="flex w-96 items-center justify-between gap-3 rounded-3xl bg-white/20 px-3 py-2 outline outline-2 outline-transparent transition-all duration-200 focus-within:bg-white/30 focus-within:outline-white hover:bg-white/30 dark:bg-[#212121] dark:focus-within:bg-[#2a2a2a] dark:hover:bg-[#2a2a2a]">
+                    <div class="flex w-full items-center gap-2 border-r-2 border-white/30 dark:border-[#7c7c7c]">
                         <Icon icon="material-symbols:search-rounded"
                             class="size-8 cursor-pointer transition duration-200" :class="useView.currentComponent === 'SearchPage'
-                                ? 'text-[#FFE5D6]'
-                                : 'text-[#FFE5D6]/30'
+                                ? 'text-white dark:text-[#FFE5D6]'
+                                : 'text-white/70 dark:text-[#FFE5D6]/30'
                                 " />
                         <input v-model="searchValue" @input="useActivity.changeSearchKey(searchValue)" type="text"
-                            class="w-full border-none bg-transparent text-white outline-[#BC4D15] focus:outline-none"
+                            class="w-full border-none bg-transparent text-white placeholder-white/60 outline-none focus:outline-none dark:placeholder-white/40"
                             @click="
                                 useView.setComponent('SearchPage');
                             useView.selectItem(this);
@@ -147,8 +161,8 @@ onMounted(() => {
                             useView.setComponent('CategoriesPage');
                         useView.selectItem(this);
                         " :class="useView.currentComponent === 'CategoriesPage'
-                            ? 'text-[#FFE5D6]'
-                            : 'text-[#FFE5D6]/30'
+                            ? 'text-white dark:text-[#FFE5D6]'
+                            : 'text-white/70 dark:text-[#FFE5D6]/30'
                             " />
                 </div>
             </div>
@@ -161,7 +175,8 @@ onMounted(() => {
                     useView.setComponent('UserPage');
                 useView.selectItem(this);
                 " type="button" class="cursor-pointer hover:scale-105">
-                    <div class="flex h-[43px] items-center rounded-full bg-gray-500 p-[2px]" width="44">
+                    <div class="flex h-[43px] items-center rounded-full bg-white/30 p-[2px] dark:bg-gray-500"
+                        width="44">
                         <img class="aspect-square rounded-full object-cover" width="42" :src="authStore.user.avatar_path
                             ? authStore.user.avatar_path
                             : defaultImgage
@@ -172,10 +187,12 @@ onMounted(() => {
                 </button>
             </div>
             <button @click="logout()" type="button"
-                class="mr-[10px] h-9 w-28 cursor-pointer rounded-full bg-[#1D1512] hover:scale-105 hover:brightness-125">
-                <div class="brightness-125" :style="{ color: useView.currentColor }">
-                    Đăng xuất
-                </div>
+                class="h-9 w-28 cursor-pointer rounded-full font-semibold transition-all duration-200 hover:scale-105"
+                :class="isDarkMode
+                    ? 'bg-[#1D1512] hover:brightness-125'
+                    : 'bg-white text-gray-900 hover:brightness-95'"
+                :style="isDarkMode ? { color: useView.currentColor } : {}">
+                Đăng xuất
             </button>
         </div>
     </div>

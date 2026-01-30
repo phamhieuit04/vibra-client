@@ -66,18 +66,14 @@ onMounted(() => {
     <div class="relative bg-black">
         <Header />
         <Sidebar />
-        <div
-            :class="[
-                'fixed top-[64px] h-[83.4%] rounded-[24px] bg-[#1D1512] shadow-xl transition-all duration-300',
-                showSidePanel ? 'left-[23%] w-[57.4%]' : 'left-[23%] w-[76.6%]',
-            ]"
-        >
+        <div :class="[
+            'fixed top-[64px] h-[83.4%] rounded-[24px] bg-white dark:bg-[#1D1512] shadow-xl',
+            showSidePanel ? 'left-[23%] w-[57.4%]' : 'left-[23%] w-[76.6%]',
+        ]">
             <component :is="components[currentComponent]" />
         </div>
-        <div
-            v-if="showSidePanel"
-            class="fixed left-[80.7%] top-[64px] h-[83.4%] w-[19%] overflow-auto rounded-[24px] bg-[#1D1512] scrollbar-none"
-        >
+        <div v-if="showSidePanel"
+            class="fixed left-[80.7%] top-[64px] h-[83.4%] w-[19%] overflow-auto rounded-[24px] bg-[#1D1512] scrollbar-none">
             <WaitListPanel v-if="useView.sidePanelState == 'waitlist'" />
             <SidePanel v-else />
         </div>
@@ -87,13 +83,8 @@ onMounted(() => {
         </div>
 
         <div class="absolute right-4 top-4 z-[150]">
-            <Notify
-                v-for="item in notifyList"
-                :key="item.message"
-                :index="item.index"
-                :is-error="item.isError"
-                :message="item.message"
-            />
+            <Notify v-for="item in notifyList" :key="item.message" :index="item.index" :is-error="item.isError"
+                :message="item.message" />
         </div>
 
         <Loading v-if="loading" />

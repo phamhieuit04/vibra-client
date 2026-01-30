@@ -3,11 +3,56 @@
 @tailwind utilities;
 
 body {
-    background-color: black;
+    background-color: white;
     font-family: 'Montserrat Variable', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.dark body {
+    background-color: black;
 }
 
 .scrollbar-style {
     scrollbar-width: medium;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.scrollbar-style::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.scrollbar-style::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-style::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.scrollbar-style::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dark .scrollbar-style {
+    scrollbar-width: medium;
     scrollbar-color: #373230 transparent;
+}
+
+.dark .scrollbar-style::-webkit-scrollbar-thumb {
+    background-color: #373230;
+}
+
+.dark .scrollbar-style::-webkit-scrollbar-thumb:hover {
+    background-color: #4a4240;
+}
+
+.scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
 }
