@@ -30,50 +30,53 @@ onMounted(() => {
 </script>
 
 <template>
-    <Icon icon="ic:round-volume-off" v-if="vol == 0" class="size-7 text-gray-800 dark:text-white" />
-    <Icon icon="ic:round-volume-up" v-else class="size-7 text-gray-800 dark:text-white" />
-
+    <Icon icon="ic:round-volume-off" v-if="vol == 0" class="size-7"
+        :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'" />
+    <Icon icon="ic:round-volume-up" v-else class="size-7"
+        :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'" />
     <div class="relative mb-[23px] ml-2 mt-2 flex w-[150px] items-center" @mouseenter="isHover = true"
         @mouseleave="isHover = false">
         <input v-model="vol" ref="volume" type="range"
-            class="absolute z-40 my-2 mt-[24px] h-0 w-full appearance-none rounded-full bg-opacity-100 accent-gray-800 dark:accent-white focus:outline-none" />
-        <div class="pointer-events-none absolute inset-y-0 left-0 z-10 mt-[6px] h-[4px]" :style="'width: ${vol}%;'"
-            :class="isHover
-                ? 'bg-gray-800 dark:bg-green-500'
-                : 'bg-gray-600 dark:bg-white'"></div>
-        <div class="absolute inset-y-0 left-0 z-[-0] mt-[6px] h-[4px] w-full rounded-full bg-gray-300 dark:bg-gray-500">
-        </div>
+            class="absolute z-40 my-2 mt-[24px] h-0 w-full appearance-none rounded-full focus:outline-none" :class="isFullscreen
+                ? 'accent-white'
+                : 'accent-black dark:accent-white'" />
+        <div class="pointer-events-none absolute inset-y-0 left-0 z-10 mt-[6px] h-[4px]" :style="`width: ${vol}%;`"
+            :class="isFullscreen ? 'bg-white' : 'bg-black dark:bg-white'"></div>
+        <div class="absolute inset-y-0 left-0 mt-[6px] h-[4px] w-full rounded-full bg-gray-300 dark:bg-gray-500"></div>
     </div>
 
     <div class="ml-4">
         <div v-if="!isFullscreen" class="relative flex">
-            <Icon icon="material-symbols:home-storage-outline" v-if="
-                !useView.showSidePanel ||
-                useView.sidePanelState !== 'waitlist'
-            " class="relative mr-3 size-7 cursor-pointer text-gray-800 dark:text-white" @click="
-                useView.showSidePanel = true;
-            useView.sidePanelState = 'waitlist';
-            " />
-            <Icon icon="material-symbols:home-storage" v-if="
-                useView.showSidePanel &&
-                useView.sidePanelState == 'waitlist'
-            " class="mr-3 size-7 cursor-pointer text-gray-800 dark:text-white" @click="
-                useView.showSidePanel = false;
-            useView.sidePanelState = '';
-            " />
+            <Icon icon="material-symbols:home-storage-outline"
+                v-if="!useView.showSidePanel || useView.sidePanelState !== 'waitlist'"
+                class="mr-3 size-7 cursor-pointer" :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'"
+                @click="
+                    useView.showSidePanel = true;
+                useView.sidePanelState = 'waitlist';
+                " />
 
-            <h1 class="absolute right-9 top-0 mt-[-6px] text-[10px] text-gray-800 dark:text-white">
+            <Icon icon="material-symbols:home-storage"
+                v-if="useView.showSidePanel && useView.sidePanelState == 'waitlist'" class="mr-3 size-7 cursor-pointer"
+                :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'" @click="
+                    useView.showSidePanel = false;
+                useView.sidePanelState = '';
+                " />
+
+            <h1 class="absolute right-9 top-0 mt-[-6px] text-[10px]"
+                :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'">
                 {{ currentWaitlist.length }}
             </h1>
 
-            <Icon icon="ri:video-line" v-if="
-                !useView.showSidePanel || useView.sidePanelState !== 'data'
-            " class="size-7 cursor-pointer text-gray-800 dark:text-white" @click="
-                useView.showSidePanel = true;
-            useView.sidePanelState = 'data';
-            " />
+            <Icon icon="ri:video-line" v-if="!useView.showSidePanel || useView.sidePanelState !== 'data'"
+                class="size-7 cursor-pointer" :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'"
+                @click="
+                    useView.showSidePanel = true;
+                useView.sidePanelState = 'data';
+                " />
+
             <Icon icon="ri:video-fill" v-if="useView.showSidePanel && useView.sidePanelState == 'data'"
-                class="size-7 cursor-pointer text-gray-800 dark:text-white" @click="
+                class="size-7 cursor-pointer" :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'"
+                @click="
                     useView.showSidePanel = false;
                 useView.sidePanelState = '';
                 " />
@@ -81,9 +84,10 @@ onMounted(() => {
     </div>
 
     <div class="ml-4">
-        <Icon icon="fa6-solid:compress" v-if="useView.isFullscreen"
-            class="size-6 cursor-pointer text-gray-800 dark:text-white" @click="useView.toggleFullscreen" />
-        <Icon icon="fa6-solid:expand" v-else class="text-semibold size-6 cursor-pointer text-gray-800 dark:text-white"
-            @click="useView.toggleFullscreen" />
+        <Icon icon="fa6-solid:compress" v-if="useView.isFullscreen" class="size-6 cursor-pointer"
+            :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'" @click="useView.toggleFullscreen" />
+
+        <Icon icon="fa6-solid:expand" v-else class="size-6 cursor-pointer"
+            :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'" @click="useView.toggleFullscreen" />
     </div>
 </template>

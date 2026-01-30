@@ -74,7 +74,7 @@ onMounted(() => {
 <template>
     <div class="relative h-[calc(100vh-155px)] w-full bg-gray-300 text-gray-900 dark:bg-slate-400 dark:text-white">
         <div class="h-full">
-            <img class="h-full w-full object-cover opacity-50" :src="currentTrack.thumbnail_path" />
+            <img class="h-full w-full object-cover brightness-75" :src="currentTrack.thumbnail_path" />
         </div>
 
         <div

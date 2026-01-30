@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 const { item } = toRefs(props);
-const { currentTrack } = storeToRefs(useSong);
+const { currentTrack, isFullscreen } = storeToRefs(useSong);
 const notHaveSong = ref(false);
 const thisPlaylistListSong = ref([]);
 const emit = defineEmits(['userPress']);
@@ -84,12 +84,15 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div v-if="notHaveSong"
-        class="my-1 flex cursor-pointer justify-between text-nowrap text-xl dark:hover:bg-[#3E3D3D] hover:bg-gray-100"
-        @click="addSongToPlaylist">
+    <div v-if="notHaveSong" class="my-1 flex cursor-pointer justify-between text-nowrap text-xl select-none" :class="isFullscreen
+        ? 'hover:opacity-75 dark:opacity-75'
+        : 'hover:opacity-75 dark:hover:opacity-75'
+        " @click="addSongToPlaylist">
         <div class="px-3 py-2 text-xs">
             {{ item.name }}
         </div>
-        <div class="px-3 py-2 text-[10px]">Thêm vào danh sách phát</div>
+        <div class="px-3 py-2 text-[10px]">
+            Thêm vào danh sách phát
+        </div>
     </div>
 </template>
