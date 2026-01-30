@@ -77,6 +77,8 @@ async function unloveThisSong() {
 
 async function downloadThisSong() {
     if (!currentTrack.value.id) return;
+
+    useModal.loading = true;
     try {
         const res = await api.get(`/payment/create-bill?song_id=${currentTrack.value.id}`, {
             headers: {
@@ -85,12 +87,15 @@ async function downloadThisSong() {
         });
         if (res.data.code == 200) {
             useActivity.setDownload(res.data.data);
+            useModal.loading = false;
             window.location.href = res.data.data.checkout_url;
         } else {
+            useModal.loading = false;
             useActivity.addNotify(true, 'Không lấy được link thanh toán!');
         }
     } catch (err) {
         console.error(err);
+        useModal.loading = false;
         useActivity.addNotify(true, 'Không lấy được link thanh toán!');
     }
 }

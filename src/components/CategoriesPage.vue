@@ -3,6 +3,7 @@ import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useViewStore } from '@/stores/view';
 import { useActivityStore } from '@/stores/activity';
+import defaultImgage from '@/assets/default.jpg';
 
 const useView = useViewStore();
 const useActivity = useActivityStore();
@@ -48,8 +49,8 @@ function updateMouse(e) {
                         {{ item.name }}
                     </p>
 
-                    <img :src="item.thumbnail_path"
-                        class="absolute bottom-6 right-6 h-32 w-32 rotate-12 drop-shadow-lg" />
+                    <img :src="item.thumbnail_path" class="absolute bottom-6 right-6 h-32 w-32 rotate-12 drop-shadow-lg"
+                        @error="(event) => (event.target.src = defaultImgage)" />
                 </div>
             </div>
         </div>

@@ -75,7 +75,6 @@ async function FetchSongData() {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
         });
-        console.log(res.data.data);
         topSong.value = res.data.data;
     } catch (e) {
         console.log(e);
@@ -89,8 +88,7 @@ async function FetchInterestSongData() {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
         });
-        console.log(res.data.data);
-        interestSongs.value = res.data.data;
+        interestSongs.value = res.data.data.songs;
     } catch (e) {
         console.log(e);
     }
@@ -180,9 +178,9 @@ onMounted(async () => {
                                         currentTrack.id == item.id && isPlaying
                                     ),
                                 }" :src="item.thumbnail_path" alt="" style="animation-duration: 5s" @error="
-                                (event) =>
-                                    (event.target.src = defaultImgage)
-                            " />
+                                    (event) =>
+                                        (event.target.src = defaultImgage)
+                                " />
                             <div class="ml-4 flex-1">
                                 <p class="font-medium">{{ item.name }}</p>
                                 <p class="text-sm text-gray-600 dark:text-[#FFE5D6]/70">

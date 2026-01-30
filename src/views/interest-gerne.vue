@@ -1,108 +1,207 @@
 <script setup>
-import { onMounted, ref, watch, toRefs, computed } from 'vue';
-import { api } from '@/api/axios';
-import { Icon } from '@iconify/vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import MyLogo from '@/assets/MyLogo.svg';
+import { onMounted, ref } from 'vue'
+import { api } from '@/api/axios'
+import { Icon } from '@iconify/vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import defaultImgage from '@/assets/default.jpg';
 
-const authStore = useAuthStore();
-const router = useRouter();
+const authStore = useAuthStore()
+const router = useRouter()
 
-let categories = ref([]);
-const selectedCategories = ref([]);
+// step
+const step = ref(1)
+
+// data
+const categories = ref([])
+const hobbies = ref([])
+
+// selected
+const selectedCategories = ref([])
+const selectedHobbies = ref([])
 
 const loading = ref(true)
+const isSubmitting = ref(false)
 
-function toggleSelect(item) {
-    const index = selectedCategories.value.indexOf(item)
-    if (index === -1) {
-        selectedCategories.value.push(item)
-    } else {
-        selectedCategories.value.splice(index, 1)
+function toggleSelect(list, item) {
+    const idx = list.indexOf(item)
+    idx === -1 ? list.push(item) : list.splice(idx, 1)
+}
+
+function nextStep() {
+    if (step.value === 1 && selectedCategories.value.length > 0) {
+        step.value = 2
     }
 }
 
-function HandleSubmit() {
-    let selectedCateString = "";
-    selectedCategories.value.forEach(categories => {
-        selectedCateString += categories.id + ",";
-    });
-    sendCategories(selectedCateString);
-    router.push("/");
+function prevStep() {
+    step.value = 1
+}
+
+async function submitAll() {
+    isSubmitting.value = true
+
+    const cateIds = selectedCategories.value.map(i => i.id).join(',')
+    const hobbyIds = selectedHobbies.value.map(i => i.id).join(',')
+
+    try {
+        await api.get(
+            `/home/save-interested?category_id=${cateIds}&hobby_id=${hobbyIds}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + authStore.user.token,
+                },
+            }
+        )
+        router.push('/')
+    } catch (e) {
+        console.log(e)
+    } finally {
+        isSubmitting.value = false
+    }
 }
 
 async function getAllCategories() {
-    try {
-        const res = await api.get('/category/index', {
-            headers: {
-                Authorization: 'Bearer ' + authStore.user.token,
-            },
-        });
-
-        if (res.data.code === 200) {
-            categories = res.data.data;
-            loading.value = false;
-        }
-    } catch (e) {
-        console.log(e);
-    }
+    const res = await api.get('/category/index', {
+        headers: { Authorization: 'Bearer ' + authStore.user.token },
+    })
+    categories.value = res.data.data
 }
 
-async function sendCategories(cateString) {
-    try {
-        const res = await api.get(`/home/save-interested?category_id=${cateString}`, {
-            headers: {
-                Authorization: 'Bearer ' + authStore.user.token,
-            },
-        });
-
-        if (res.data.code === 200) {
-            categories = res.data.data;
-            loading.value = false;
-        }
-    } catch (e) {
-        console.log(e);
-    }
+async function getAllHobby() {
+    const res = await api.get('/home/list-hobby', {
+        headers: { Authorization: 'Bearer ' + authStore.user.token },
+    })
+    hobbies.value = res.data.data
 }
 
-
-onMounted(() => {
-    getAllCategories();
+onMounted(async () => {
+    await Promise.all([getAllCategories(), getAllHobby()])
+    loading.value = false
 })
-
 </script>
 
 <template>
-    <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-60" v-if="isLoading">
-        <Icon icon="svg-spinners:180-ring" class="text-[200px] text-[#BC4D15]" />
+    <div v-if="isSubmitting" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60">
+        <Icon icon="svg-spinners:180-ring" class="text-[120px] text-[#BC4D15]" />
     </div>
-    <div class="flex h-screen items-center justify-center bg-gradient-to-b from-[#292929] from-10% to-black to-80%">
-        <div class="flex h-[740px] w-[734px] flex-col items-center rounded-2xl bg-[#121212] px-24 py-8">
-            <img :src="MyLogo" alt=""
-                class="duration-400 my-[-60px] h-[200px] w-[200px] text-[#FFE5D6] invert transition hover:text-white" />
-            <h1 class="pt-2 text-4xl font-bold text-white">
-                Chọn thể loại nhạc bạn mong muốn
+
+    <div class="flex h-screen items-center justify-center bg-black">
+        <div class="flex h-[780px] w-[760px] flex-col items-center rounded-2xl bg-[#121212] px-16 py-10">
+            <div class="mt-4 flex gap-3 w-full">
+                <div class="h-1.5 w-full rounded-full" :class="step === 1 ? 'bg-[#BC4D15]' : 'bg-gray-600'" />
+                <div class="h-1.5 w-full rounded-full" :class="step === 2 ? 'bg-[#BC4D15]' : 'bg-gray-600'" />
+            </div>
+
+            <h1 class="mt-16 text-3xl font-semibold tracking-tight text-white">
+                {{ step === 1 ? 'Chọn thể loại bạn thích' : 'Chọn sở thích của bạn' }}
             </h1>
 
-            <hr class="w-full text-gray-500 mt-10 opacity-15" />
+            <p class="mt-2 text-sm text-gray-400">
+                {{ step === 1
+                    ? 'Bạn có thể chọn nhiều thể loại'
+                    : 'Điều này giúp cá nhân hoá trải nghiệm của bạn' }}
+            </p>
 
-            <div v-if="!loading"
-                class="w-full h-96 items-start justify-start flex flex-wrap p-2 gap-5 overflow-y-auto scrollbar-none">
-                <div v-for="item in categories" :key="item.id" class="w-40 h-10">
-                    <div class="cursor-pointer select-none rounded-xl border p-4 text-center"
-                        @click="toggleSelect(item)" :class="selectedCategories.includes(item)
-                            ? 'bg-[#BC4D15] text-white border-[#BC4D15] shadow-lg scale-105'
-                            : 'bg-white text-gray-800 hover:bg-gray-100 border-gray-300'">
-                        {{ item.name }}
+            <div v-show="step === 1" class="relative w-full">
+                <div v-if="loading"
+                    class="relative z-10 mt-10 pb-24 grid h-[460px] w-full grid-cols-3 gap-5 overflow-hidden">
+                    <div v-for="i in 9" :key="'skeleton-' + i"
+                        class="relative h-[160px] w-full overflow-hidden rounded-xl border border-transparent bg-[#1a1a1a]">
+                        <div class="absolute inset-0 shimmer"></div>
+                        <div
+                            class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
+                            <div class="h-3 w-2/3 rounded bg-black/30 shimmer"></div>
+                        </div>
                     </div>
+                </div>
+                <div v-else
+                    class="relative z-10 mt-10 pb-24 grid h-[460px] w-full grid-cols-3 gap-5 overflow-y-scroll scrollbar-none">
+                    <div v-for="item in categories" :key="item.id" @click="toggleSelect(selectedCategories, item)"
+                        class="group relative cursor-pointer rounded-xl border transition-colors" :class="selectedCategories.includes(item)
+                            ? 'border-[#BC4D15]'
+                            : 'border-transparent hover:brightness-75'">
+                        <img :src="item.thumbnail_path" class="h-full w-full aspect-square object-cover"
+                            draggable="false" @error="(event) => (event.target.src = defaultImgage)" />
+
+                        <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3"
+                            :class="selectedCategories.includes(item) ? 'ring-2 ring-[#BC4D15]' : ''">
+                            <span class="text-sm font-semibold text-white drop-shadow">
+                                {{ item.name }}
+                            </span>
+                        </div>
+
+                        <div v-if="selectedCategories.includes(item)"
+                            class="absolute right-2 top-2 rounded-full bg-[#BC4D15] px-2 py-0.5 text-xs font-medium text-black">
+                            Chọn
+                        </div>
+                    </div>
+                </div>
+                <div v-show="step === 1 && !loading"
+                    class="pointer-events-none absolute bottom-0 left-0 z-20 h-24 w-full bg-gradient-to-t from-[#121212] to-transparent">
                 </div>
             </div>
 
-            <button @click="HandleSubmit()"
-                class="mt-6 rounded-full w-80 bg-[#BC4D15] p-4 font-bold text-black transition ease-in hover:scale-105 hover:bg-[#b36b47]">
-                Xác nhận
-            </button>
+            <div v-show="step === 2 && !loading"
+                class="mt-10 flex h-96 w-full flex-wrap content-start gap-3 overflow-y-auto">
+                <div v-for="item in hobbies" :key="item.id" @click="toggleSelect(selectedHobbies, item)"
+                    class="cursor-pointer select-none rounded-full border px-4 py-2 text-sm transition-colors" :class="selectedHobbies.includes(item)
+                        ? 'bg-[#BC4D15] border-[#BC4D15] text-black'
+                        : 'bg-gray-100 border-gray-300 text-gray-800 hover:bg-gray-200'">
+                    {{ item.name }}
+                </div>
+            </div>
+
+            <div class="mt-auto flex justify-end gap-3 pt-6 w-full">
+                <button v-if="step === 2" @click="prevStep"
+                    class="rounded-full px-6 py-2 text-sm text-gray-300 hover:bg-[#1f1f1f]">
+                    Quay lại
+                </button>
+
+                <button v-if="step === 1" @click="nextStep" :disabled="selectedCategories.length === 0"
+                    class="rounded-full bg-[#BC4D15] px-8 py-2 text-sm font-medium text-black disabled:opacity-40">
+                    Tiếp tục
+                </button>
+
+                <button v-if="step === 2" @click="submitAll" :disabled="selectedHobbies.length === 0"
+                    class="rounded-full bg-[#BC4D15] px-8 py-2 text-sm font-medium text-black disabled:opacity-40">
+                    Hoàn thành
+                </button>
+            </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.05) 0%,
+            rgba(0, 0, 0, 0.1) 20%,
+            rgba(0, 0, 0, 0.15) 40%,
+            rgba(0, 0, 0, 0.1) 60%,
+            rgba(0, 0, 0, 0.05) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.dark .shimmer {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 20%,
+            rgba(255, 255, 255, 0.15) 40%,
+            rgba(255, 255, 255, 0.1) 60%,
+            rgba(255, 255, 255, 0.05) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+</style>
