@@ -100,7 +100,7 @@ onMounted(() => {
     const observer = new MutationObserver(updateDarkMode);
     observer.observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['class']
+        attributeFilter: ['class'],
     });
 });
 </script>
@@ -142,15 +142,15 @@ onMounted(() => {
                         " />
                 </div>
                 <div
-                    class="flex w-96 items-center justify-between gap-3 rounded-3xl bg-white/20 px-3 py-2 outline outline-2 outline-transparent transition-all duration-200 focus-within:bg-white/30 focus-within:outline-white hover:bg-white/30 dark:bg-[#212121] dark:focus-within:bg-[#2a2a2a] dark:hover:bg-[#2a2a2a]">
-                    <div class="flex w-full items-center gap-2 border-r-2 border-white/30 dark:border-[#7c7c7c]">
+                    class="flex w-96 items-center justify-between gap-3 rounded-3xl bg-white/70 px-3 py-2 outline outline-2 outline-transparent transition-all duration-200 focus-within:outline-black hover:bg-white dark:bg-[#212121] dark:focus-within:outline-white dark:hover:bg-[#2a2a2a]">
+                    <div class="flex w-full items-center gap-2 border-r-2 border-zinc-300 dark:border-[#7c7c7c]">
                         <Icon icon="material-symbols:search-rounded"
                             class="size-8 cursor-pointer transition duration-200" :class="useView.currentComponent === 'SearchPage'
-                                ? 'text-white dark:text-[#FFE5D6]'
-                                : 'text-white/70 dark:text-[#FFE5D6]/30'
+                                ? 'text-zinc-900 dark:text-[#FFE5D6]'
+                                : 'text-zinc-600 dark:text-[#FFE5D6]/50'
                                 " />
                         <input v-model="searchValue" @input="useActivity.changeSearchKey(searchValue)" type="text"
-                            class="w-full border-none bg-transparent text-white placeholder-white/60 outline-none focus:outline-none dark:placeholder-white/40"
+                            class="w-full border-none bg-transparent text-zinc-900 placeholder-zinc-500 outline-none focus:outline-none dark:text-white dark:placeholder-white/40"
                             @click="
                                 useView.setComponent('SearchPage');
                             useView.selectItem(this);
@@ -161,8 +161,8 @@ onMounted(() => {
                             useView.setComponent('CategoriesPage');
                         useView.selectItem(this);
                         " :class="useView.currentComponent === 'CategoriesPage'
-                            ? 'text-white dark:text-[#FFE5D6]'
-                            : 'text-white/70 dark:text-[#FFE5D6]/30'
+                            ? 'text-zinc-900 dark:text-[#FFE5D6]'
+                            : 'text-zinc-600 dark:text-[#FFE5D6]/50'
                             " />
                 </div>
             </div>
@@ -190,8 +190,8 @@ onMounted(() => {
                 class="h-9 w-28 cursor-pointer rounded-full font-semibold transition-all duration-200 hover:scale-105"
                 :class="isDarkMode
                     ? 'bg-[#1D1512] hover:brightness-125'
-                    : 'bg-white text-gray-900 hover:brightness-95'"
-                :style="isDarkMode ? { color: useView.currentColor } : {}">
+                    : 'bg-white text-gray-900 hover:brightness-95'
+                    " :style="isDarkMode ? { color: useView.currentColor } : {}">
                 Đăng xuất
             </button>
         </div>

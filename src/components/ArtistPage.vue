@@ -146,7 +146,7 @@ onMounted(() => {
 </script>
 <template>
     <div
-        class="scrollbar-style h-[calc(100vh-12rem)] w-full space-y-6 overflow-y-auto rounded-[24px] bg-white text-gray-900 dark:bg-[#1D1512] dark:text-[#FFFF]">
+        class="scrollbar-style scrollbar-none h-[calc(100vh-12rem)] w-full space-y-6 overflow-y-auto rounded-[24px] bg-white text-gray-900 dark:bg-[#1D1512] dark:text-[#FFFF]">
         <div class="relative h-96 items-center">
             <img :src="artistData.avatar_path" alt="" class="absolute z-0 h-full w-full object-cover" />
 
@@ -247,7 +247,7 @@ onMounted(() => {
                 <div class="">
                     <div
                         class="relative mb-3 flex h-[30rem] w-full cursor-pointer flex-col justify-end overflow-hidden rounded-3xl p-12 duration-200 ease-in-out hover:scale-[102%]">
-                        <img class="absolute inset-0 h-full w-full rounded-3xl object-cover"
+                        <img class="absolute inset-0 h-full w-full rounded-3xl object-cover brightness-75"
                             :src="artistData.avatar_path" />
                         <div class="relative z-10">
                             <p class="text-2xl font-semibold text-white">

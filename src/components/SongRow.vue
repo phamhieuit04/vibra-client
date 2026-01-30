@@ -79,50 +79,66 @@ onMounted(() => {
     });
 });
 </script>
+
 <template>
-    <li class="flex cursor-pointer items-center justify-between rounded-md hover:bg-[#2A2929]"
-        @mouseenter="isHover = true" @mouseleave="isHover = false" @click="useSong.playOrPauseThisSong(track)">
+    <li class="flex cursor-pointer items-center justify-between rounded-md
+               transition-colors
+               hover:bg-zinc-200 dark:hover:bg-[#2A2929]" @mouseenter="isHover = true" @mouseleave="isHover = false"
+        @click="useSong.playOrPauseThisSong(track)">
         <div class="flex w-full items-center py-1.5">
             <div v-if="isHover" class="ml-[14px] mr-[6px] w-[40px] cursor-pointer">
-                <Icon icon="material-symbols:play-arrow-rounded" v-if="!isPlaying" class="size-7 text-white" />
+                <Icon icon="material-symbols:play-arrow-rounded" v-if="!isPlaying"
+                    class="size-7 text-zinc-900 dark:text-white" />
                 <Icon icon="material-symbols:play-arrow-rounded"
-                    v-else-if="isPlaying && currentTrack.name !== track.name" class="size-7 text-white" />
-                <Icon icon="material-symbols:pause-rounded" v-else class="size-7 text-white" />
+                    v-else-if="isPlaying && currentTrack.name !== track.name"
+                    class="size-7 text-zinc-900 dark:text-white" />
+                <Icon icon="material-symbols:pause-rounded" v-else class="size-7 text-zinc-900 dark:text-white" />
             </div>
-            <div v-else class="ml-5 w-[40px] p-1 font-semibold text-white">
+            <div v-else class="ml-5 w-[40px] p-1 font-semibold
+                       text-zinc-600 dark:text-white">
                 <span :class="{
-                    'text-green-500':
+                    'text-green-600 dark:text-green-500':
                         currentTrack && currentTrack.name == track.name,
                 }">
                     {{ index }}
                 </span>
             </div>
             <div>
-                <div :class="{
-                    'text-green-500':
-                        currentTrack && currentTrack.name == track.name,
-                }" class="font-semibold text-white">
+                <div class="font-semibold
+                           text-zinc-900 dark:text-white" :class="{
+                            'text-green-600 dark:text-green-500':
+                                currentTrack && currentTrack.name == track.name,
+                        }">
                     {{ track.name }}
                 </div>
-                <span class="text-sm font-semibold text-gray-400">{{
-                    track.author.name
-                }}</span>
+
+                <span class="text-sm font-semibold
+                           text-zinc-500 dark:text-gray-400">
+                    {{ track.author.name }}
+                </span>
             </div>
         </div>
         <div class="flex items-center">
-            <div v-if="isTrackTime" class="mx-5 text-xs text-gray-400">
+            <div v-if="isTrackTime" class="mx-5 text-xs
+                       text-zinc-500 dark:text-gray-400">
                 {{ isTrackTime }}
             </div>
-            <button @click.stop="useSong.addSongToWaitlist(track)"
-                class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
+
+            <button @click.stop="useSong.addSongToWaitlist(track)" class="mr-4 rounded p-1
+                       text-zinc-500 hover:bg-black/5
+                       dark:text-[#FFE5D6]/50 dark:hover:bg-white/5">
                 <Icon icon="material-symbols:home-storage-outline" class="text-2xl" />
             </button>
-            <button v-if="!isFav" @click.stop="unloveThisSong"
-                class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
+
+            <button v-if="!isFav" @click.stop="unloveThisSong" class="mr-4 rounded p-1
+                       text-zinc-500 hover:bg-black/5
+                       dark:text-[#FFE5D6]/50 dark:hover:bg-white/5">
                 <Icon icon="material-symbols:delete-rounded" class="text-2xl" />
             </button>
-            <button v-if="playlist.type === 2" @click.stop="removeFromPlaylist"
-                class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
+
+            <button v-if="playlist.type === 2" @click.stop="removeFromPlaylist" class="mr-4 rounded p-1
+                       text-zinc-500 hover:bg-black/5
+                       dark:text-[#FFE5D6]/50 dark:hover:bg-white/5">
                 <Icon icon="material-symbols:delete-rounded" class="text-2xl" />
             </button>
         </div>
