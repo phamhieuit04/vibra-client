@@ -72,24 +72,31 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="relative h-[calc(100vh-155px)] w-full bg-slate-400 text-white">
+    <div class="relative h-[calc(100vh-155px)] w-full bg-gray-300 text-gray-900 dark:bg-slate-400 dark:text-white">
         <div class="h-full">
             <img class="h-full w-full object-cover opacity-50" :src="currentTrack.thumbnail_path" />
         </div>
 
-        <div class="absolute bottom-5 left-1/2 w-11/12 -translate-x-1/2 transform rounded-2xl bg-[#1D1512] p-4">
+        <div
+            class="absolute bottom-5 left-1/2 w-11/12 -translate-x-1/2 transform rounded-2xl bg-white p-4 dark:bg-[#1D1512]">
             <h2 class="mb-3 text-sm font-semibold">Giới thiệu về nghệ sĩ</h2>
             <div class="mb-4 flex items-center justify-between">
-                <div class="h-16 w-16 rounded-full bg-gray-600">
+                <div class="h-16 w-16 rounded-full bg-gray-400 dark:bg-gray-600">
                     <img class="h-full w-full rounded-full object-cover" :src="currentTrack.author.avatar_path" />
                 </div>
                 <div v-if="currentTrack.author.id !== authStore.user.id">
                     <button v-if="!isFollowed" @click="followThisArtist"
-                        class="rounded-full border border-[#BC4D15] px-4 py-2 text-sm font-semibold text-[#BC4D15] transition hover:bg-[#BC4D15] hover:text-black">
+                        class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:scale-110" :style="{
+                            borderColor: useView.currentColor,
+                            color: useView.currentColor,
+                        }">
                         Theo dõi
                     </button>
                     <button v-else @click="unfollowThisArtist"
-                        class="rounded-full border border-[#BC4D15] px-4 py-2 text-sm font-semibold text-[#BC4D15] transition hover:bg-[#BC4D15] hover:text-black">
+                        class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:scale-110" :style="{
+                            borderColor: useView.currentColor,
+                            color: useView.currentColor,
+                        }">
                         Hủy theo dõi
                     </button>
                 </div>
@@ -97,7 +104,7 @@ onMounted(() => {
 
             <div>
                 <h3 class="text-2xl font-semibold">{{ currentTrack.name }}</h3>
-                <p class="text-sm text-zinc-400">
+                <p class="text-sm text-gray-600 dark:text-zinc-400">
                     {{ currentTrack.author.followers }} người theo dõi
                 </p>
                 <h2 class="mb-1 mt-2 text-sm font-semibold">

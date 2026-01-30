@@ -73,7 +73,7 @@ onMounted(() => {
             <component :is="components[currentComponent]" />
         </div>
         <div v-if="showSidePanel"
-            class="fixed left-[80.7%] top-[64px] h-[83.4%] w-[19%] overflow-auto rounded-[24px] bg-[#1D1512] scrollbar-none">
+            class="fixed left-[80.7%] top-[64px] h-[83.4%] w-[19%] overflow-auto rounded-[24px] bg-white dark:bg-[#1D1512] scrollbar-none">
             <WaitListPanel v-if="useView.sidePanelState == 'waitlist'" />
             <SidePanel v-else />
         </div>

@@ -55,15 +55,15 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="space-y-10 py-8 text-[#FFFF]">
+    <div class="space-y-10 py-8 text-gray-900 dark:text-[#FFFF]">
         <div class="scrollbar-style h-[calc(100vh-220px)] overflow-y-auto px-8">
-            <div class="mb-20 text-[#FFE5D6]">
+            <div class="mb-20 text-gray-900 dark:text-[#FFE5D6]">
                 <div class="flex flex-row gap-6">
                     <div class="relative max-w-md flex-1">
                         <h2 class="mb-1 text-2xl font-semibold">
                             Top tìm kiếm
                         </h2>
-                        <div class="group relative cursor-pointer rounded-lg bg-[#2a2a2a] p-4 transition hover:bg-[#333]"
+                        <div class="group relative cursor-pointer rounded-lg bg-gray-200 p-4 transition hover:bg-gray-300 dark:bg-[#2a2a2a] dark:hover:bg-[#333]"
                             @click="checkNull">
                             <button
                                 class="absolute bottom-6 right-6 flex h-16 w-16 translate-y-2 transform items-center justify-center rounded-full opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 hover:bg-black"
@@ -73,7 +73,7 @@ onMounted(() => {
                                 <span class="ml-0.5 text-4xl text-black">▶</span>
                             </button>
                             <div class="mb-9 items-start space-y-3">
-                                <div class="relative h-24 w-24 overflow-hidden rounded-md bg-zinc-700">
+                                <div class="relative h-24 w-24 overflow-hidden rounded-md bg-gray-300 dark:bg-zinc-700">
                                     <img class="h-full w-full rounded-xl object-cover" :src="listSongSearch[0]
                                         ? listSongSearch[0]
                                             ?.thumbnail_path
@@ -88,7 +88,7 @@ onMounted(() => {
                                     <h3 class="text-2xl font-bold">
                                         {{ listSongSearch[0]?.name }}
                                     </h3>
-                                    <p class="mt-1 text-sm text-gray-400">
+                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                         Bài hát •
                                         <span class="font-semibold">{{
                                             listSongSearch[0]?.author.name
@@ -103,10 +103,10 @@ onMounted(() => {
                         <h2 class="mb-1 text-2xl font-semibold">Bài hát</h2>
                         <div class="scrollbar-style mt-3 h-56 overflow-y-auto pr-8">
                             <div v-for="(item, index) in listSongSearch" :key="item.id"
-                                class="flex cursor-pointer items-center justify-between rounded-lg p-2 transition hover:bg-[#2a1d18]"
+                                class="flex cursor-pointer items-center justify-between rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-[#2a1d18]"
                                 @click="useSong.playThisSong(item)">
                                 <div class="flex items-center space-x-4">
-                                    <div class="h-10 w-10 rounded-md bg-zinc-700">
+                                    <div class="h-10 w-10 rounded-md bg-gray-300 dark:bg-zinc-700">
                                         <img class="h-full w-full rounded-xl object-cover" :src="item?.thumbnail_path"
                                             @error="
                                                 (event) =>
@@ -122,7 +122,8 @@ onMounted(() => {
                                     <span>{{ item.total_played }} lượt nghe</span>
                                     <button @click.stop="
                                         useSong.addSongToWaitlist(item)
-                                        " class="mr-4 rounded p-1 text-[#FFE5D6]/50 hover:bg-white/5">
+                                        "
+                                        class="mr-4 rounded p-1 text-gray-600 hover:bg-gray-200 dark:text-[#FFE5D6]/50 dark:hover:bg-white/5">
                                         <Icon icon="material-symbols:home-storage-outline" class="text-2xl" />
                                     </button>
                                 </div>
@@ -132,7 +133,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="mb-8 text-[#FFE5D6]" v-if="listArtistSearch.length > 0">
+            <div class="mb-8 text-gray-900 dark:text-[#FFE5D6]" v-if="listArtistSearch.length > 0">
                 <h2 class="mb-1 text-2xl font-semibold">Nghệ sĩ</h2>
                 <div class="scrollbar-style flex space-x-4 overflow-x-auto">
                     <div class="flex w-max space-x-4 px-1 py-2">
@@ -143,7 +144,7 @@ onMounted(() => {
                             useView.setComponent('ArtistPage');
                             useView.setArtistData(item);
                             ">
-                            <div class="mb-2 h-48 w-48 rounded-full bg-zinc-700">
+                            <div class="mb-2 h-48 w-48 rounded-full bg-gray-300 dark:bg-zinc-700">
                                 <img class="h-48 w-48 rounded-full object-cover" :src="item.avatar_path" @error="
                                     (event) =>
                                         (event.target.src = defaultImgage)
@@ -158,7 +159,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="mb-8 text-[#FFE5D6]" v-if="listAlbumSearch.length > 0">
+            <div class="mb-8 text-gray-900 dark:text-[#FFE5D6]" v-if="listAlbumSearch.length > 0">
                 <h2 class="mb-1 text-2xl font-semibold">Albums</h2>
                 <div class="scrollbar-style w-full overflow-x-auto overflow-y-hidden">
                     <div class="flex w-max space-x-4 px-1 py-2">
@@ -169,7 +170,7 @@ onMounted(() => {
                             useView.setComponent('PlaylistPage');
                             useView.setPlaylistData(item);
                             ">
-                            <div class="mb-2 h-48 w-48 rounded-xl bg-zinc-700">
+                            <div class="mb-2 h-48 w-48 rounded-xl bg-gray-300 dark:bg-zinc-700">
                                 <img class="h-48 w-48 rounded-xl object-cover" :src="item.thumbnail_path" @error="
                                     (event) =>
                                         (event.target.src = defaultImgage)
