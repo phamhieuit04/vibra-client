@@ -32,11 +32,14 @@ function checkNull() {
 async function FetchSearchData() {
     if (!searchKey.value) return;
     try {
-        const res = await api.get(`/home/search?search-key=${searchKey.value}`, {
-            headers: {
-                Authorization: 'Bearer ' + authStore.user.token,
+        const res = await api.get(
+            `/home/search?search-key=${searchKey.value}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + authStore.user.token,
+                },
             },
-        });
+        );
         if (res.data.code == 200) {
             listAlbumSearch.value = res.data.data.albums;
             listArtistSearch.value = res.data.data.artists;
@@ -46,9 +49,12 @@ async function FetchSearchData() {
         console.log(e);
     }
 }
-watch(() => searchKey.value, () => {
-    FetchSearchData();
-});
+watch(
+    () => searchKey.value,
+    () => {
+        FetchSearchData();
+    },
+);
 
 onMounted(() => {
     FetchSearchData();
@@ -60,21 +66,24 @@ onMounted(() => {
             <div class="mb-20 text-gray-900 dark:text-[#FFE5D6]">
                 <div class="flex flex-row gap-6">
                     <div class="relative max-w-md flex-1">
-                        <h2 class="mb-1 text-2xl font-semibold">
+                        <h2 class="mb-1 text-2xl font-semibold text-gray-900 dark:text-white">
                             Top tìm kiếm
                         </h2>
-                        <div class="group relative cursor-pointer rounded-lg bg-gray-200 p-4 transition hover:bg-gray-300 dark:bg-[#2a2a2a] dark:hover:bg-[#333]"
+
+                        <div class="group relative cursor-pointer rounded-xl bg-[#f5f5f5] transition hover:bg-[#ededed] dark:bg-[#2a2a2a] dark:hover:bg-[#333]"
                             @click="checkNull">
                             <button
-                                class="absolute bottom-6 right-6 flex h-16 w-16 translate-y-2 transform items-center justify-center rounded-full opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 hover:bg-black"
+                                class="absolute bottom-6 right-6 flex h-16 w-16 translate-y-2 transform items-center justify-center rounded-full opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 hover:brightness-110"
                                 :style="{
                                     backgroundColor: useView.currentColor,
                                 }">
-                                <span class="ml-0.5 text-4xl text-black">▶</span>
+                                <span class="ml-0.5 text-4xl dark:text-black text-white">▶</span>
                             </button>
-                            <div class="mb-9 items-start space-y-3">
-                                <div class="relative h-24 w-24 overflow-hidden rounded-md bg-gray-300 dark:bg-zinc-700">
-                                    <img class="h-full w-full rounded-xl object-cover" :src="listSongSearch[0]
+
+                            <div class="mb-9 items-start space-y-3 p-4">
+                                <div
+                                    class="relative h-24 w-24 overflow-hidden rounded-lg bg-[#e0e0e0] dark:bg-zinc-700">
+                                    <img class="h-full w-full rounded-lg object-cover" :src="listSongSearch[0]
                                         ? listSongSearch[0]
                                             ?.thumbnail_path
                                         : defaultImgage
@@ -84,15 +93,16 @@ onMounted(() => {
                                                 defaultImgage)
                                         " alt="" />
                                 </div>
-                                <div class="">
-                                    <h3 class="text-2xl font-bold">
+
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
                                         {{ listSongSearch[0]?.name }}
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                         Bài hát •
-                                        <span class="font-semibold">{{
-                                            listSongSearch[0]?.author.name
-                                        }}</span>
+                                        <span class="font-semibold text-gray-700 dark:text-gray-300">
+                                            {{ listSongSearch[0]?.author.name }}
+                                        </span>
                                     </p>
                                 </div>
                             </div>
