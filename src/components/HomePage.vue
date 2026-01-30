@@ -24,6 +24,7 @@ const popularAlbum = ref([]);
 const topArtist = ref([]);
 const topSong = ref([]);
 const interestSongs = ref([]);
+const recentRotation = ref([]);
 const isLoading = ref(true);
 
 async function FetchAlbumData() {
@@ -38,6 +39,23 @@ async function FetchAlbumData() {
         console.log(e);
     }
 }
+
+async function FetchRecentRotation() {
+    try {
+        const res = await api.get('/home/recent-rotation', {
+            params: {
+                limit: 5,
+            },
+            headers: {
+                Authorization: 'Bearer ' + authStore.user.token,
+            },
+        });
+        recentRotation.value = res.data.data;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 async function FetchArtistData() {
     try {
         const res = await api.get('/home/list-artist', {
@@ -94,6 +112,7 @@ async function playThisAlbum(id) {
 
 async function handleLoading() {
     await FetchInterestSongData();
+    await FetchRecentRotation();
     await FetchAlbumData();
     await FetchArtistData();
     await FetchSongData();
@@ -264,6 +283,67 @@ onMounted(() => {
                     <div
                         class="pointer-events-none absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-zinc-900 to-transparent"
                     ></div>
+                </div>
+            </div>
+
+            <div v-if="recentRotation.length > 0" class="mb-8 text-[#FFE5D6]">
+                <h2 class="mb-1 text-2xl font-semibold">Lắng nghe gần đây</h2>
+                <div class="space-y-2">
+                    <div
+                        v-for="item in recentRotation.slice(0, 5)"
+                        :key="item.id"
+                        class="flex cursor-pointer items-center rounded-lg p-3 duration-200 ease-in-out hover:bg-white/5"
+                        @click="useSong.playOrPauseThisSong(item)"
+                    >
+                        <img
+                            class="h-14 w-14 object-cover transition-all duration-300"
+                            :class="{
+                                'animate-spin rounded-full':
+                                    currentTrack.id == item.id && isPlaying,
+                                'rounded-md': !(
+                                    currentTrack.id == item.id && isPlaying
+                                ),
+                            }"
+                            :src="item.thumbnail_path"
+                            alt=""
+                            style="animation-duration: 5s"
+                            @error="
+                                (event) => (event.target.src = defaultImgage)
+                            "
+                        />
+                        <div class="ml-4 flex-1">
+                            <p class="font-medium">{{ item.name }}</p>
+                            <p class="text-sm text-[#FFE5D6]/70">
+                                {{ item.total_played }} lượt nghe
+                            </p>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="mx-5 text-xs text-gray-400">
+                                {{ caculateTrackTime(item.song_path, item.id) }}
+                            </div>
+                            <button
+                                @click.stop="useSong.addSongToWaitlist(item)"
+                                class="rounded p-2 text-[#FFE5D6]/50 hover:bg-white/5"
+                            >
+                                <Icon
+                                    icon="material-symbols:home-storage-outline"
+                                    class="text-2xl"
+                                />
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        v-if="isLoading"
+                        class="flex items-center rounded-lg p-3"
+                    >
+                        <div class="h-14 w-14 rounded-md bg-zinc-700"></div>
+                        <div class="ml-4 flex-1">
+                            <div
+                                class="mb-2 h-5 w-32 rounded bg-zinc-700"
+                            ></div>
+                            <div class="h-4 w-24 rounded bg-zinc-700"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
