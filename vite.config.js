@@ -8,6 +8,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     server: {
         host: true,
+        allowedHosts: 'all',
     },
     plugins: [
         vue(),
