@@ -25,78 +25,79 @@ export const useSongStore = defineStore('song', {
         prevList: [],
         isShuffle: true,
         currentDownload: '',
+        audioVersion: 0,
     }),
     actions: {
         playThisSong(track) {
             this.currentTrack = track;
-            console.log(this.currentTrack);
 
-            if (this.audio && this.audio.src) {
+            if (this.audio && typeof this.audio.pause === 'function') {
                 this.audio.pause();
-                this.isPlaying = false;
                 this.audio.src = '';
             }
+            this.audio = null;
+            this.isPlaying = false;
 
-            this.audio = new Audio();
-            this.audio.src = track.song_path;
+            this.audio = new Audio(track.song_path);
+            this.audio.volume = this.vol / 100;
+            this.audioVersion++;
 
-            if (!this.audio.src || !this.audio) {
-                console.log(
-                    'Nguồn không tồn tại hoặc bài hát bị lỗi định dạng',
-                );
+            if (!track.song_path) {
+                console.warn('Nguồn không tồn tại hoặc bài hát bị lỗi định dạng');
                 return;
             }
 
             try {
                 const authStore = useAuthStore();
-                const res = api.get(`/song/update/${track.id}`, {
+                api.get(`/song/update/${track.id}`, {
                     headers: {
                         Authorization: 'Bearer ' + authStore.user.token,
                     },
                 });
             } catch (e) {
                 console.log(e);
-                alert('Call API thất bại');
             }
 
-            setTimeout(() => {
-                this.isPlaying = true;
-                this.audio.play();
-            }, 200);
+            this.audio.addEventListener('canplay', () => {
+                this.audio.play()
+                    .then(() => {
+                        this.isPlaying = true;
+                    })
+                    .catch((err) => {
+                        console.warn('play() bị chặn:', err.message);
+                        this.isPlaying = false;
+                    });
+            }, { once: true });
+
+            this.audio.addEventListener('ended', () => {
+                this.nextSongs();
+            }, { once: true });
         },
 
         addSongToWaitlist(track) {
             track.index = this.currentWaitlist.length;
             this.currentWaitlist.push(track);
             this.fetchIndex();
-            useActivityStore().addNotify(
-                false,
-                'Đã thêm bài hát vào hàng chờ!',
-            );
+            useActivityStore().addNotify(false, 'Đã thêm bài hát vào hàng chờ!');
         },
+
         addPlaylistToWaitlist(playlist) {
-            if (!playlist || playlist.length == 0) return;
+            if (!playlist || playlist.length === 0) return;
             for (let i = playlist.length - 1; i >= 0; i--) {
                 this.currentWaitlist.unshift(playlist[i]);
             }
             this.fetchIndex();
-            useActivityStore().addNotify(
-                false,
-                'Đã thêm danh sách phát này vào hàng chờ!',
-            );
+            useActivityStore().addNotify(false, 'Đã thêm danh sách phát này vào hàng chờ!');
         },
 
         addAndPlayThisPlaylist(playlist) {
-            if (!playlist || playlist.length == 0) return;
+            if (!playlist || playlist.length === 0) return;
             for (let i = playlist.length - 1; i > 0; i--) {
                 this.currentWaitlist.unshift(playlist[i]);
             }
             this.playThisSong(playlist[0]);
             this.fetchIndex();
-            useActivityStore().addNotify(
-                false,
-                'Đã thêm danh sách phát này vào hàng chờ!',
-            );
+            useActivityStore().addNotify(false, 'Đã thêm danh sách phát này vào hàng chờ!');
         },
 
         deleteSongFromWaitlist(track) {
@@ -112,24 +113,20 @@ export const useSongStore = defineStore('song', {
 
         nextSongs() {
             if (this.currentWaitlist.length > 0) {
-                if (this.isShuffle == false) {
+                if (this.isShuffle === false) {
                     this.prevList.unshift(this.currentTrack);
                     const nextSong = this.currentWaitlist.shift();
                     this.playThisSong(nextSong);
                     this.fetchIndex();
                 } else {
-                    const tmpTrack =
-                        this.currentWaitlist[
-                            Math.floor(
-                                Math.random() * this.currentWaitlist.length,
-                            )
-                        ];
+                    const tmpTrack = this.currentWaitlist[
+                        Math.floor(Math.random() * this.currentWaitlist.length)
+                    ];
                     this.playThisSongInWaitlist(tmpTrack);
                 }
             } else {
                 this.playThisSong(this.currentTrack);
                 this.fetchIndex();
-                return;
             }
         },
 
@@ -139,17 +136,11 @@ export const useSongStore = defineStore('song', {
                 this.currentWaitlist.unshift(this.currentTrack);
                 this.playThisSong(prevSong);
                 this.fetchIndex();
-            } else {
-                return;
             }
         },
 
         playOrPauseThisSong(track) {
-            if (
-                !this.audio ||
-                !this.audio.src ||
-                this.currentTrack.id !== track.id
-            ) {
+            if (!this.audio || !this.audio.src || this.currentTrack.id !== track.id) {
                 this.playThisSong(track);
                 return;
             }
@@ -157,12 +148,14 @@ export const useSongStore = defineStore('song', {
         },
 
         playOrPauseSong() {
+            if (!this.audio) return;
             if (this.audio.paused) {
-                this.isPlaying = true;
-                this.audio.play();
+                this.audio.play()
+                    .then(() => { this.isPlaying = true; })
+                    .catch((err) => { console.warn('play() bị chặn:', err.message); });
             } else {
-                this.isPlaying = false;
                 this.audio.pause();
+                this.isPlaying = false;
             }
         },
 
@@ -182,17 +175,26 @@ export const useSongStore = defineStore('song', {
 
         setVolume(range) {
             this.vol = range;
+            if (this.audio) this.audio.volume = range / 100;
         },
+
         setSongTime(time) {
             this.songTime = time;
+            if (this.audio) this.audio.currentTime = time;
         },
 
         resetState() {
-            isPlaying = false;
-            audio = null;
-            currentPlaylist = null;
-            currentTrack = null;
+            if (this.audio) {
+                this.audio.pause();
+                this.audio.src = '';
+            }
+            this.isPlaying = false;
+            this.audio = null;
+            this.currentPlaylist = null;
+            this.currentTrack = null;
         },
     },
-    persist: true,
+    persist: {
+        pick: ['currentTrack', 'currentWaitlist', 'prevList', 'isShuffle', 'vol', 'currentPlaylist', 'currentDownload', 'audioVersion'],
+    },
 });
