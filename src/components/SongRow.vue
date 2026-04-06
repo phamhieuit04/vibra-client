@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -33,7 +33,7 @@ const emit = defineEmits(['deleteFavSong', 'deletePlaylistSong']);
 
 async function unloveThisSong() {
     try {
-        const res = await api.get(`/library/destroy-favorite-song/${track.value.id}`, {
+        const res = await apiHelper.get(`/library/destroy-favorite-song/${track.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -52,7 +52,7 @@ async function unloveThisSong() {
 
 async function removeFromPlaylist() {
     try {
-        const res = await api.get(`/song/destroy?song_id=${track.value.id}&playlist_id=${playlist.value.id}`, {
+        const res = await apiHelper.get(`/song/destroy?song_id=${track.value.id}&playlist_id=${playlist.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -29,7 +29,7 @@ const isLoading = ref(true);
 
 async function FetchAlbumData() {
     try {
-        const res = await api.get('/home/list-album', {
+        const res = await apiHelper.get('/home/list-album', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -42,7 +42,7 @@ async function FetchAlbumData() {
 
 async function FetchRecentRotation() {
     try {
-        const res = await api.get('/home/recent-rotation', {
+        const res = await apiHelper.get('/home/recent-rotation', {
             params: {
                 limit: 5,
             },
@@ -58,7 +58,7 @@ async function FetchRecentRotation() {
 
 async function FetchArtistData() {
     try {
-        const res = await api.get('/home/list-artist', {
+        const res = await apiHelper.get('/home/list-artist', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -70,7 +70,7 @@ async function FetchArtistData() {
 }
 async function FetchSongData() {
     try {
-        const res = await api.get('/home/list-song', {
+        const res = await apiHelper.get('/home/list-song', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -83,7 +83,7 @@ async function FetchSongData() {
 
 async function FetchInterestSongData() {
     try {
-        const res = await api.get('/home/get-recommended-songs', {
+        const res = await apiHelper.get('/home/get-recommended-songs', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -96,7 +96,7 @@ async function FetchInterestSongData() {
 
 async function playThisAlbum(id) {
     try {
-        const res = await api.get(`/playlist/show/${id}`, {
+        const res = await apiHelper.get(`/playlist/show/${id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

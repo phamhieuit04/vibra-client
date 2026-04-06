@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { storeToRefs } from 'pinia';
@@ -34,7 +34,7 @@ const openMenu = ref(false);
 
 async function loveThisSong() {
     try {
-        const res = await api.get(`/song/store/${currentTrack.value.id}`, {
+        const res = await apiHelper.get(`/song/store/${currentTrack.value.id}`, {
             headers: { Authorization: 'Bearer ' + authStore.user.token },
         });
         if (res.data.code == 200) {
@@ -50,7 +50,7 @@ async function loveThisSong() {
 
 async function unloveThisSong() {
     try {
-        const res = await api.get(`/library/destroy-favorite-song/${currentTrack.value.id}`, {
+        const res = await apiHelper.get(`/library/destroy-favorite-song/${currentTrack.value.id}`, {
             headers: { Authorization: 'Bearer ' + authStore.user.token },
         });
         if (res.data.code == 200) {
@@ -68,7 +68,7 @@ async function downloadThisSong() {
     if (!currentTrack.value.id) return;
     useModal.loading = true;
     try {
-        const res = await api.get(`/payment/create-bill?song_id=${currentTrack.value.id}`, {
+        const res = await apiHelper.get(`/payment/create-bill?song_id=${currentTrack.value.id}`, {
             headers: { Authorization: 'Bearer ' + authStore.user.token },
         });
         if (res.data.code == 200) {

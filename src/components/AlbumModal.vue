@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref } from 'vue';
 import { useModalStore } from '@/stores/modal';
 import { useAuthStore } from '@/stores/auth';
@@ -53,7 +53,7 @@ const saveProfile = async () => {
     }
 
     try {
-        const res = await api.post(`/profile/update-album/${playlistEditData.value.id}`,
+        const res = await apiHelper.post(`/profile/update-album/${playlistEditData.value.id}`,
             formData, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,

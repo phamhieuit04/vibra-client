@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -32,7 +32,7 @@ function checkNull() {
 async function FetchSearchData() {
     if (!searchKey.value) return;
     try {
-        const res = await api.get(
+        const res = await apiHelper.get(
             `/home/search?search-key=${searchKey.value}`,
             {
                 headers: {

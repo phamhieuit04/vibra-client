@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useAuthStore } from '@/stores/auth';
@@ -21,7 +21,7 @@ async function sendVerify() {
     try {
         hash.value = '';
         isLoading.value = true;
-        const res = await api.get(`/email/verify?id=${authStore.user.id}`);
+        const res = await apiHelper.get(`/email/verify?id=${authStore.user.id}`);
         console.log(res);
         isLoading.value = false;
     } catch (e) {

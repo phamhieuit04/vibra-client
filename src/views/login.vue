@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import SigninMethods from '@/components/signinMethods.vue';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
@@ -15,13 +15,13 @@ const password = ref('');
 const isLoading = ref(false);
 
 const login = async () => {
-    if (email.value == '' || password == '') {
+    if (email.value == '' || password.value == '') {
         alert('Vui lòng nhập đầy đủ thông tin!');
         return;
     }
     try {
         isLoading.value = true;
-        const res = await api.post(
+        const res = await apiHelper.post(
             '/login',
             {
                 email: email.value,
@@ -52,7 +52,7 @@ const login = async () => {
 
 async function sendGreeting() {
     try {
-        const res = await api.get('/email/send-greeting', {
+        const res = await apiHelper.get('/email/send-greeting', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

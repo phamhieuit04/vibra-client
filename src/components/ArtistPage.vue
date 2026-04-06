@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -36,7 +36,7 @@ function checkMe() {
 
 async function getArtistSong() {
     try {
-        const res = await api.get(
+        const res = await apiHelper.get(
             `/artist/get-artist-songs/${artistData.value.id}`,
             {
                 headers: {
@@ -52,7 +52,7 @@ async function getArtistSong() {
 }
 async function getArtistAlbum() {
     try {
-        const res = await api.get(
+        const res = await apiHelper.get(
             `/artist/get-artist-albums/${artistData.value.id}`,
             {
                 headers: {
@@ -69,7 +69,7 @@ async function getArtistAlbum() {
 
 async function followThisArtist() {
     try {
-        const res = await api.get(`/artist/follow/${artistData.value.id}`, {
+        const res = await apiHelper.get(`/artist/follow/${artistData.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -84,7 +84,7 @@ async function followThisArtist() {
 }
 async function unfollowThisArtist() {
     try {
-        const res = await api.get(
+        const res = await apiHelper.get(
             `/library/destroy-favorite-artist/${artistData.value.id}`,
             {
                 headers: {
@@ -103,7 +103,7 @@ async function unfollowThisArtist() {
 
 async function blockThisArtist() {
     try {
-        const res = await api.get(`/artist/block/${artistData.value.id}`, {
+        const res = await apiHelper.get(`/artist/block/${artistData.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

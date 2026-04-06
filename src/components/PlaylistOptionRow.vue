@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -29,7 +29,7 @@ const emit = defineEmits(['userPress']);
 
 async function getListSong() {
     try {
-        const res = await api.get(`/library/list-playlist-song/${item.value.id}`, {
+        const res = await apiHelper.get(`/library/list-playlist-song/${item.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -51,7 +51,7 @@ async function getListSong() {
 
 async function addSongToPlaylist() {
     try {
-        const res = await api.get(`/song/add-song-to-playlist?song_id=${currentTrack.value.id}&playlist_id=${item.value.id}`, {
+        const res = await apiHelper.get(`/song/add-song-to-playlist?song_id=${currentTrack.value.id}&playlist_id=${item.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

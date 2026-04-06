@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -44,7 +44,7 @@ const updateDarkMode = () => {
 
 async function getAllCategories() {
     try {
-        const res = await api.get('/category/index', {
+        const res = await apiHelper.get('/category/index', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -61,7 +61,7 @@ async function getAllCategories() {
 
 async function logout() {
     try {
-        const res = await api.get('/logout', {
+        const res = await apiHelper.get('/logout', {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

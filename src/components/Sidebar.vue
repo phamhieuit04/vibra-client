@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -42,7 +42,7 @@ const filteredArtist = computed(() => {
 
 const createPlaylist = async () => {
     try {
-        const res = await api.post('/library/store-playlist', {}, {
+        const res = await apiHelper.post('/library/store-playlist', {}, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -57,7 +57,7 @@ const createPlaylist = async () => {
 
 const deletePlaylist = async (item) => {
     try {
-        const res = await api.get(`/library/destroy-playlist/${item.id}`, {
+        const res = await apiHelper.get(`/library/destroy-playlist/${item.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

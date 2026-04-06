@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { api } from '@/api/axios'
+import apiHelper from '@/helpers/apiHelper'
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -45,7 +45,7 @@ async function submitAll() {
     const hobbyIds = selectedHobbies.value.map(i => i.id).join(',')
 
     try {
-        await api.get(
+        await apiHelper.get(
             `/home/save-interested?category_id=${cateIds}&hobby_id=${hobbyIds}`,
             {
                 headers: {
@@ -62,14 +62,14 @@ async function submitAll() {
 }
 
 async function getAllCategories() {
-    const res = await api.get('/category/index', {
+    const res = await apiHelper.get('/category/index', {
         headers: { Authorization: 'Bearer ' + authStore.user.token },
     })
     categories.value = res.data.data
 }
 
 async function getAllHobby() {
-    const res = await api.get('/home/list-hobby', {
+    const res = await apiHelper.get('/home/list-hobby', {
         headers: { Authorization: 'Bearer ' + authStore.user.token },
     })
     hobbies.value = res.data.data

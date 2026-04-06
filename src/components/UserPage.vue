@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { ref, computed, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useViewStore } from '@/stores/view';
@@ -28,7 +28,7 @@ const bills = ref([]);
 
 async function getBills() {
     try {
-        const res = await api.get(`/profile/payment-history`, {
+        const res = await apiHelper.get(`/profile/payment-history`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -45,7 +45,7 @@ async function getBills() {
 
 async function createAlbum() {
     try {
-        const res = await api.get(`/profile/create-album`, {
+        const res = await apiHelper.get(`/profile/create-album`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

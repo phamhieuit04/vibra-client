@@ -1,4 +1,4 @@
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { defineStore } from 'pinia';
 import { useAuthStore } from './auth';
 import { ref } from 'vue';
@@ -31,7 +31,7 @@ export const useActivityStore = defineStore('activity', {
         async fetchData() {
             try {
                 const authStore = useAuthStore();
-                const albumRes = await api.get(
+                const albumRes = await apiHelper.get(
                     '/library/list-playlist?type=1',
                     {
                         headers: {
@@ -40,7 +40,7 @@ export const useActivityStore = defineStore('activity', {
                         type: 1,
                     },
                 );
-                const myPlaylistRes = await api.get(
+                const myPlaylistRes = await apiHelper.get(
                     '/library/list-playlist?type=2',
                     {
                         headers: {
@@ -49,12 +49,12 @@ export const useActivityStore = defineStore('activity', {
                         type: 2,
                     },
                 );
-                const artistRes = await api.get('/library/list-artist', {
+                const artistRes = await apiHelper.get('/library/list-artist', {
                     headers: {
                         Authorization: 'Bearer ' + authStore.user.token,
                     },
                 });
-                const songRes = await api.get('/library/list-song', {
+                const songRes = await apiHelper.get('/library/list-song', {
                     headers: {
                         Authorization: 'Bearer ' + authStore.user.token,
                     },
@@ -93,12 +93,12 @@ export const useActivityStore = defineStore('activity', {
         async fetchUserData() {
             try {
                 const authStore = useAuthStore();
-                const res = await api.get(`/profile/list-album`, {
+                const res = await apiHelper.get(`/profile/list-album`, {
                     headers: {
                         Authorization: 'Bearer ' + authStore.user.token,
                     },
                 });
-                const res2 = await api.get(`/profile/list-song`, {
+                const res2 = await apiHelper.get(`/profile/list-song`, {
                     headers: {
                         Authorization: 'Bearer ' + authStore.user.token,
                     },
@@ -114,7 +114,7 @@ export const useActivityStore = defineStore('activity', {
         async syncGdrive(type, id) {
             try {
                 const authStore = useAuthStore();
-                const res = await api.get(
+                const res = await apiHelper.get(
                     `/google-drive/sync-files?type=${type}&id=${id}`,
                     {
                         headers: {

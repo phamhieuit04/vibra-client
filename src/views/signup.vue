@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import SigninMethods from '@/components/signinMethods.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
@@ -18,11 +18,10 @@ const signup = async () => {
         return;
     }
     try {
-        const res = await api.post('/signup', {
+        const res = await apiHelper.post('/signup', {
             email: email.value,
             password: password.value,
-        },
-        );
+        });
         if (res.data.code == 200) {
             alert('Đăng Kí Thành Công!!!');
             authStore.setUser(res.data.data);

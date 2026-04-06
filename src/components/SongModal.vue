@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref } from 'vue';
 import { useViewStore } from '@/stores/view';
 import { useAuthStore } from '@/stores/auth';
@@ -90,7 +90,7 @@ function chooseImg() {
 
 async function songNotify(artistId, songId) {
     try {
-        const res = await api.get(`/firebase/notify-new-song?artist_id=${artistId}&song_id=${songId}`, {
+        const res = await apiHelper.get(`/firebase/notify-new-song?artist_id=${artistId}&song_id=${songId}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -127,7 +127,7 @@ const uploadSong = async () => {
     }
 
     try {
-        const res = await api.post('/profile/upload-song', formData, {
+        const res = await apiHelper.post('/profile/upload-song', formData, {
             headers: {
                 Authorization: 'Bearer ' + user.value.token,
             },

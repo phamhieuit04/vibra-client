@@ -1,4 +1,4 @@
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { defineStore } from 'pinia';
 import defaultImgage from '@/assets/default.jpg';
 import defaultSong from '@/assets/DefaultSong.mp3';
@@ -49,7 +49,7 @@ export const useSongStore = defineStore('song', {
 
             try {
                 const authStore = useAuthStore();
-                api.get(`/song/update/${track.id}`, {
+                apiHelper.get(`/song/update/${track.id}`, {
                     headers: {
                         Authorization: 'Bearer ' + authStore.user.token,
                     },

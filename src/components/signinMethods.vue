@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { Icon } from '@iconify/vue';
 import {
     getAuth,
@@ -71,7 +71,7 @@ export default {
                 });
         },
         async auth(authRes) {
-            await api.get('/firebase/auth', {
+            await apiHelper.get('/firebase/auth', {
                 params: {
                     email: authRes.user.email,
                     device_token: this.deviceToken,
@@ -89,7 +89,7 @@ export default {
             });
         },
         async sendGreeting() {
-            await api.get('/email/send-greeting', {
+            await apiHelper.get('/email/send-greeting', {
                 headers: {
                     Authorization: 'Bearer ' + this.authStore.user.token,
                 },

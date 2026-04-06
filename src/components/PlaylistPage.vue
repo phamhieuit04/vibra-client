@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import SongRow from './SongRow.vue';
 import { Icon } from '@iconify/vue';
 import { useSongStore } from '@/stores/song';
@@ -26,7 +26,7 @@ const isLoading = ref(true);
 async function FetchPlaylistData() {
     if (playlistData.value.type == 1) {
         try {
-            const res = await api.get(`/playlist/show/${playlistData.value.id}`, {
+            const res = await apiHelper.get(`/playlist/show/${playlistData.value.id}`, {
                 headers: {
                     Authorization: 'Bearer ' + authStore.user.token,
                 },
@@ -38,7 +38,7 @@ async function FetchPlaylistData() {
         }
     } else {
         try {
-            const res = await api.get(`/library/list-playlist-song/${playlistData.value.id}`, {
+            const res = await apiHelper.get(`/library/list-playlist-song/${playlistData.value.id}`, {
                 headers: {
                     Authorization: 'Bearer ' + authStore.user.token,
                 },
@@ -56,7 +56,7 @@ async function FetchPlaylistData() {
 
 async function addToLibrary() {
     try {
-        const res = await api.get(`/home/store/${playlistData.value.id}`, {
+        const res = await apiHelper.get(`/home/store/${playlistData.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -71,7 +71,7 @@ async function addToLibrary() {
 }
 async function removeFromLibrary() {
     try {
-        const res = await api.get(`/library/destroy-playlist/${playlistData.value.id}`, {
+        const res = await apiHelper.get(`/library/destroy-playlist/${playlistData.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -88,7 +88,7 @@ async function removeFromLibrary() {
 async function downloadThisPlaylist() {
     if (!playlistData.value.id) return;
     try {
-        const res = await api.get(`/payment/create-bill?playlist_id=${playlistData.value.id}`, {
+        const res = await apiHelper.get(`/payment/create-bill?playlist_id=${playlistData.value.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },

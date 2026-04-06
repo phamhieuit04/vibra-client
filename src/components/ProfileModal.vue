@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref } from 'vue';
 import { useViewStore } from '@/stores/view';
 import { useAuthStore } from '@/stores/auth';
@@ -53,12 +53,12 @@ const saveProfile = async () => {
     }
 
     try {
-        const res = await api.post('/profile/update', formData, {
+        const res = await apiHelper.post('/profile/update', formData, {
             headers: {
                 Authorization: 'Bearer ' + user.value.token,
             },
         });
-        const fetchUser = await api.get('/profile/show', {
+        const fetchUser = await apiHelper.get('/profile/show', {
             headers: {
                 Authorization: 'Bearer ' + user.value.token,
             },

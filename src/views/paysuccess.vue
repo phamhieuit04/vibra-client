@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api/axios';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -22,7 +22,7 @@ const isLoading = ref(true);
 
 async function sendEmail() {
     try {
-        const res = await api.get(`/email/send-appreciation?id=${useActivity.downloadBill.id}`, {
+        const res = await apiHelper.get(`/email/send-appreciation?id=${useActivity.downloadBill.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
@@ -34,7 +34,7 @@ async function sendEmail() {
 }
 async function updateBill() {
     try {
-        const res = await api.get(`/payment/update-status/${useActivity.downloadBill.id}`, {
+        const res = await apiHelper.get(`/payment/update-status/${useActivity.downloadBill.id}`, {
             headers: {
                 Authorization: 'Bearer ' + authStore.user.token,
             },
