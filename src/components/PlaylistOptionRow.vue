@@ -60,7 +60,6 @@ async function addSongToPlaylist() {
             useActivity.fetchData();
             getListSong();
             emit('userPress');
-            useView.setComponent('HomePage');
             useActivity.addNotify(false, 'Đã thêm bài hát vào Playlist!');
         }
     } catch (e) {

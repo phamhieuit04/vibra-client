@@ -2,6 +2,7 @@
 import apiHelper from '@/helpers/apiHelper';
 import { ref, computed, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
 import { useViewStore } from '@/stores/view';
 import { storeToRefs } from 'pinia';
 import { useSongStore } from '@/stores/song';
@@ -18,7 +19,7 @@ const useView = useViewStore();
 const authStore = useAuthStore();
 const useSong = useSongStore();
 const useModal = useModalStore();
-const { currentComponent, isFullscreen } = storeToRefs(useView);
+const router = useRouter();
 const { openEditProfile, openUploadSong, openEditAlbum } =
     storeToRefs(useModal);
 const { myPlaylistList, followArtistList, myAlbumList, mySongList } =
@@ -140,8 +141,8 @@ onMounted(() => {
                                    transition-all duration-200
                                    hover:scale-105 hover:brightness-105" @click="
                                     useView.selectItem(item);
-                                useView.setComponent('PlaylistPage');
                                 useView.setPlaylistData(item);
+                                router.push({ name: 'index-playlist' });
                                 ">
                             <div class="mb-2 h-48 w-full rounded-xl
                                 bg-zinc-200 dark:bg-zinc-700
@@ -219,8 +220,8 @@ onMounted(() => {
                         transition-all duration-200 ease-in-out
                         hover:scale-105 hover:brightness-105" @click="
                             useView.selectItem(item);
-                        useView.setComponent('PlaylistPage');
                         useView.setPlaylistData(item);
+                        router.push({ name: 'index-playlist' });
                         ">
                             <div
                                 class="mb-2 h-32 w-full rounded-xl overflow-hidden bg-zinc-300 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">
@@ -248,8 +249,8 @@ onMounted(() => {
                        transition-all duration-200 ease-in-out
                        hover:scale-105 hover:brightness-105" @click="
                         useView.selectItem(item.artist);
-                    useView.setComponent('ArtistPage');
                     useView.setArtistData(item.artist);
+                    router.push({ name: 'index-artist' });
                     ">
                             <div class="mb-5 h-32 w-32 rounded-full
                            bg-zinc-300 dark:bg-zinc-700 ring-1 ring-zinc-300 dark:ring-zinc-600">

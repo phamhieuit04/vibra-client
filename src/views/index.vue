@@ -3,15 +3,9 @@ import { ref, onMounted } from 'vue';
 import Header from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import Player from '@/components/Player.vue';
-import HomePage from '@/components/HomePage.vue';
-import PlaylistPage from '@/components/PlaylistPage.vue';
-import UserPage from '@/components/UserPage.vue';
-import SearchPage from '@/components/SearchPage.vue';
 import SongPage from '@/components/SongPage.vue';
-import ArtistPage from '@/components/ArtistPage.vue';
 import SidePanel from '@/components/SidePanel.vue';
 import WaitListPanel from '@/components/WaitListPanel.vue';
-import CategoriesSongPage from '@/components/CategoriesSongPage.vue';
 import Notify from '@/components/Notify.vue';
 
 import ProfileModal from '@/components/ProfileModal.vue';
@@ -23,7 +17,6 @@ import Loading from '@/components/Loading.vue';
 import { useSongStore } from '@/stores/song';
 import { useViewStore } from '@/stores/view';
 import { storeToRefs } from 'pinia';
-import CategoriesPage from '@/components/CategoriesPage.vue';
 import { useModalStore } from '@/stores/modal';
 import { useActivityStore } from '@/stores/activity';
 
@@ -31,7 +24,7 @@ const useSong = useSongStore();
 const { currentTrack } = storeToRefs(useSong);
 
 const useView = useViewStore();
-const { currentComponent, isFullscreen, showSidePanel, showWaitlistPanel } =
+const { isFullscreen, showSidePanel, showWaitlistPanel } =
     storeToRefs(useView);
 
 const useModal = useModalStore();
@@ -48,16 +41,6 @@ const { notifyList } = storeToRefs(useActivity);
 
 const player = ref(null);
 
-const components = {
-    HomePage,
-    PlaylistPage,
-    UserPage,
-    SearchPage,
-    CategoriesPage,
-    ArtistPage,
-    CategoriesSongPage,
-};
-
 onMounted(() => {
     useView.setFullscreenPage(player.value);
 });
@@ -70,7 +53,7 @@ onMounted(() => {
             'fixed top-[64px] h-[83.4%] rounded-[24px] bg-white dark:bg-[#1D1512] shadow-xl',
             showSidePanel ? 'left-[23%] w-[57.4%]' : 'left-[23%] w-[76.6%]',
         ]">
-            <component :is="components[currentComponent]" />
+            <RouterView />
         </div>
         <div v-if="showSidePanel"
             class="fixed left-[80.7%] top-[64px] h-[83.4%] w-[19%] overflow-auto rounded-[24px] bg-white dark:bg-[#1D1512] scrollbar-none">

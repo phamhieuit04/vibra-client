@@ -1,7 +1,7 @@
 <script setup>
 import apiHelper from '@/helpers/apiHelper';
 import { ref, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
 import defaultImgage from '@/assets/default.jpg';
 import LogoText from '@/assets/LogoText.svg';
@@ -21,6 +21,7 @@ const useModal = useModalStore();
 const useView = useViewStore();
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const searchValue = ref('');
 const colorList = ref([
@@ -41,6 +42,23 @@ const isDarkMode = ref(false);
 const updateDarkMode = () => {
     isDarkMode.value = document.documentElement.classList.contains('dark');
 };
+
+function goHome() {
+    router.push({ name: 'index-home' });
+    searchValue.value = '';
+}
+
+function goSearch() {
+    router.push({ name: 'index-search' });
+}
+
+function goCategories() {
+    router.push({ name: 'index-categories' });
+}
+
+function goUser() {
+    router.push({ name: 'index-user' });
+}
 
 async function getAllCategories() {
     try {
@@ -90,7 +108,6 @@ async function logout() {
 
 onMounted(() => {
     getAllCategories();
-    useView.setComponent('HomePage');
     if (useView.currentColor == null) {
         useView.currentColor = '#BC4D15';
     }
@@ -110,10 +127,7 @@ onMounted(() => {
         :style="{ backgroundColor: useView.currentColor }">
         <div class="relative flex items-center gap-3">
             <img class="size-20 cursor-pointer text-[64px] text-white transition duration-200 hover:opacity-80"
-                :src="LogoText" @click="
-                    useView.setComponent('HomePage');
-                useView.selectItem(this);
-                " />
+                :src="LogoText" @click="goHome" />
             <DarkModeToggle />
             <div class="relative ml-0 h-8 w-8 cursor-pointer rounded-full bg-black shadow-2xl hover:scale-105">
                 <div @click="openColorMenu = !openColorMenu"
@@ -131,12 +145,10 @@ onMounted(() => {
         <div class="flex items-center gap-2 self-center">
             <div class="flex items-center gap-3">
                 <div @click="
-                    useView.setComponent('HomePage');
-                useView.selectItem(this);
-                searchValue = '';
+                    goHome();
                 "
                     class="flex size-12 items-center justify-center rounded-full bg-black/20 transition duration-200 hover:bg-black/30 dark:bg-[#1f1f1f] dark:hover:bg-[#2a2a2a]">
-                    <Icon icon="material-symbols:home" class="size-8 cursor-pointer transition duration-200" :class="useView.currentComponent === 'HomePage'
+                    <Icon icon="material-symbols:home" class="size-8 cursor-pointer transition duration-200" :class="route.name === 'index-home'
                         ? 'text-white dark:text-[#FFE5D6]'
                         : 'text-white/50 dark:text-[#FFE5D6]/30'
                         " />
@@ -145,22 +157,16 @@ onMounted(() => {
                     class="flex w-96 items-center justify-between gap-3 rounded-3xl bg-white/70 px-3 py-2 outline outline-2 outline-transparent transition-all duration-200 focus-within:outline-black hover:bg-white dark:bg-[#212121] dark:focus-within:outline-white dark:hover:bg-[#2a2a2a]">
                     <div class="flex w-full items-center gap-2 border-r-2 border-zinc-300 dark:border-[#7c7c7c]">
                         <Icon icon="material-symbols:search-rounded"
-                            class="size-8 cursor-pointer transition duration-200" :class="useView.currentComponent === 'SearchPage'
+                            class="size-8 cursor-pointer transition duration-200" :class="route.name === 'index-search'
                                 ? 'text-zinc-900 dark:text-[#FFE5D6]'
                                 : 'text-zinc-600 dark:text-[#FFE5D6]/50'
                                 " />
                         <input v-model="searchValue" @input="useActivity.changeSearchKey(searchValue)" type="text"
                             class="w-full border-none bg-transparent text-zinc-900 placeholder-zinc-500 outline-none focus:outline-none dark:text-white dark:placeholder-white/40"
-                            @click="
-                                useView.setComponent('SearchPage');
-                            useView.selectItem(this);
-                            " placeholder="Bạn muốn phát nội dung gì?" />
+                            @click="goSearch" placeholder="Bạn muốn phát nội dung gì?" />
                     </div>
                     <Icon icon="fluent:collections-empty-16-filled"
-                        class="cursor-pointer text-3xl transition duration-200 hover:scale-110" @click="
-                            useView.setComponent('CategoriesPage');
-                        useView.selectItem(this);
-                        " :class="useView.currentComponent === 'CategoriesPage'
+                        class="cursor-pointer text-3xl transition duration-200 hover:scale-110" @click="goCategories" :class="route.name === 'index-categories'
                             ? 'text-zinc-900 dark:text-[#FFE5D6]'
                             : 'text-zinc-600 dark:text-[#FFE5D6]/50'
                             " />
@@ -171,10 +177,7 @@ onMounted(() => {
         <!-- Right Controls -->
         <div class="flex items-center gap-3">
             <div class="flex h-[44px] items-center justify-center rounded-full font-bold text-white">
-                <button @click="
-                    useView.setComponent('UserPage');
-                useView.selectItem(this);
-                " type="button" class="cursor-pointer hover:scale-105">
+                <button @click="goUser" type="button" class="cursor-pointer hover:scale-105">
                     <div class="flex h-[43px] items-center rounded-full bg-white/30 p-[2px] dark:bg-gray-500"
                         width="44">
                         <img class="aspect-square rounded-full object-cover" width="42" :src="authStore.user.avatar_path

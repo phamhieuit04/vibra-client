@@ -16,6 +16,7 @@ const authStore = useAuthStore();
 const useSong = useSongStore();
 const useModal = useModalStore();
 const useActivity = useActivityStore();
+const router = useRouter();
 
 const { artistData } = storeToRefs(useView);
 const { followArtistList } = storeToRefs(useActivity);
@@ -110,7 +111,7 @@ async function blockThisArtist() {
         });
         unfollowThisArtist();
         useActivity.fetchData();
-        useView.setComponent('HomePage');
+        router.push({ name: 'index-home' });
         useActivity.addNotify(false, 'Bạn đã hạn chế nghệ sĩ!');
     } catch (e) {
         console.log(e);
@@ -273,8 +274,8 @@ onMounted(() => {
                             class="w-48 flex-shrink-0 cursor-pointer rounded-lg px-2 duration-200 ease-in-out hover:scale-105"
                             @click="
                                 useView.selectItem(item);
-                            useView.setComponent('PlaylistPage');
                             useView.setPlaylistData(item);
+                            router.push({ name: 'index-playlist' });
                             ">
                             <div class="mb-2 h-48 w-48 rounded-xl bg-gray-300 dark:bg-zinc-700">
                                 <img class="h-full w-full rounded-xl object-cover" :src="item.thumbnail_path" />

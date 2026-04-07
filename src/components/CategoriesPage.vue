@@ -1,12 +1,14 @@
 <script setup>
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 import { useViewStore } from '@/stores/view';
 import { useActivityStore } from '@/stores/activity';
 import defaultImgage from '@/assets/default.jpg';
 
 const useView = useViewStore();
 const useActivity = useActivityStore();
+const router = useRouter();
 const { allCategories } = storeToRefs(useActivity);
 
 const x = ref(0);
@@ -42,8 +44,8 @@ function updateMouse(e) {
                     class="relative z-10 m-1 h-48 w-[320px] cursor-pointer rounded-xl bg-white p-8 shadow-md transition-all duration-200 ease-in-out hover:scale-105 dark:bg-zinc-700 dark:shadow-none"
                     @click="
                         useView.selectItem(item);
-                    useView.setComponent('CategoriesSongPage');
                     useView.setCategoriesData(item);
+                    router.push({ name: 'index-categories-song' });
                     ">
                     <p class="text-xl font-semibold text-zinc-900 dark:text-white">
                         {{ item.name }}

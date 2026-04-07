@@ -7,6 +7,13 @@ import Payfail from '@/views/payfail.vue';
 import Paysuccess from '@/views/paysuccess.vue';
 import VerifyDone from '@/views/verify-done.vue';
 import InterestGerne from '@/views/interest-gerne.vue';
+import HomePage from '@/components/HomePage.vue';
+import PlaylistPage from '@/components/PlaylistPage.vue';
+import UserPage from '@/components/UserPage.vue';
+import SearchPage from '@/components/SearchPage.vue';
+import ArtistPage from '@/components/ArtistPage.vue';
+import CategoriesPage from '@/components/CategoriesPage.vue';
+import CategoriesSongPage from '@/components/CategoriesSongPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -29,6 +36,43 @@ const router = createRouter({
             meta: {
                 requiresAuth: true,
             },
+            children: [
+                {
+                    path: '',
+                    name: 'index-home',
+                    component: HomePage,
+                },
+                {
+                    path: 'search',
+                    name: 'index-search',
+                    component: SearchPage,
+                },
+                {
+                    path: 'categories',
+                    name: 'index-categories',
+                    component: CategoriesPage,
+                },
+                {
+                    path: 'categories-song',
+                    name: 'index-categories-song',
+                    component: CategoriesSongPage,
+                },
+                {
+                    path: 'playlist',
+                    name: 'index-playlist',
+                    component: PlaylistPage,
+                },
+                {
+                    path: 'artist',
+                    name: 'index-artist',
+                    component: ArtistPage,
+                },
+                {
+                    path: 'user',
+                    name: 'index-user',
+                    component: UserPage,
+                },
+            ],
         },
         {
             path: '/verify',

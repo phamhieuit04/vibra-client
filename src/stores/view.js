@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 export const useViewStore = defineStore('view', {
     state: () => ({
-        currentComponent: 'HomePage',
         currentColor: null,
         selected: null,
         page: null,
@@ -17,10 +16,6 @@ export const useViewStore = defineStore('view', {
     }),
 
     actions: {
-        setComponent(name) {
-            this.currentComponent = name;
-        },
-
         selectItem(item) {
             this.selected = item;
         },

@@ -64,7 +64,7 @@ const deletePlaylist = async (item) => {
         });
         useActivity.fetchData();
         useActivity.addNotify(false, 'Xóa playlist thành công!!');
-        useView.setComponent('HomePage');
+        router.push({ name: 'index-home' });
     } catch (error) {
         console.error('Lỗi khi xóa playlist:', error);
         useActivity.addNotify(true, 'Xóa playlist thất bại!!');
@@ -129,8 +129,8 @@ onMounted(() => {
                     class="mt-2 flex cursor-pointer items-center gap-3 rounded p-3 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-white/10"
                     @click="
                         useView.selectItem(favSongList);
-                    useView.setComponent('PlaylistPage');
                     useView.setPlaylistData(favSongList);
+                    router.push({ name: 'index-playlist' });
                     " :class="{ 'bg-gray-100 dark:bg-white/10': useView.selected === favSongList }">
                     <div class="flex h-10 w-10 items-center justify-center rounded bg-gray-200 dark:bg-white/10">
                         <img class="w-fixed max-h-10 max-w-10 flex-shrink-0 rounded object-cover" :src="FavCover"
@@ -154,8 +154,8 @@ onMounted(() => {
                     class="flex cursor-pointer items-center gap-3 rounded p-3 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-white/10"
                     @click="
                         useView.selectItem(item);
-                    useView.setComponent('PlaylistPage');
                     useView.setPlaylistData(item);
+                    router.push({ name: 'index-playlist' });
                     " :class="{ 'bg-gray-100 dark:bg-white/10': useView.selected === item }">
                     <div class="flex h-10 w-10 rounded bg-gray-200 dark:bg-white/10">
                         <img :src="item.thumbnail_path" class="w-10 flex-shrink-0 rounded object-cover" @error="
@@ -200,8 +200,8 @@ onMounted(() => {
                     class="flex cursor-pointer items-center gap-3 rounded p-3 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-white/10"
                     @click="
                         useView.selectItem(item);
-                    useView.setComponent('PlaylistPage');
                     useView.setPlaylistData(item);
+                    router.push({ name: 'index-playlist' });
                     " :class="{ 'bg-gray-100 dark:bg-white/10': useView.selected === item }">
                     <div class="flex h-10 w-10 rounded bg-gray-200 dark:bg-white/10">
                         <img :src="item.thumbnail_path" class="h-10 w-10 flex-shrink-0 rounded object-cover" @error="
@@ -238,8 +238,8 @@ onMounted(() => {
                     class="flex cursor-pointer items-center gap-3 rounded p-3 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-white/10"
                     @click="
                         useView.selectItem(item.artist);
-                    useView.setComponent('ArtistPage');
                     useView.setArtistData(item.artist);
+                    router.push({ name: 'index-artist' });
                     " :class="{
                         'bg-gray-100 dark:bg-white/10':
                             useView.selected?.email == item.artist.email,
