@@ -1,4 +1,5 @@
 <template>
+    <DarkModeToggle v-if="showFloatingThemeControl" position="top-left" />
     <RouterView v-slot="{ Component }">
         <Transition
             enter-from-class="opacity-0"
@@ -12,3 +13,16 @@
         </Transition>
     </RouterView>
 </template>
+
+<script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import DarkModeToggle from '@/components/ThemeToggle.vue';
+
+const route = useRoute();
+
+const showFloatingThemeControl = computed(() => {
+    const authRouteNames = ['login', 'signup', 'verify', 'verify-done', 'interest-gerne'];
+    return authRouteNames.includes(String(route.name || ''));
+});
+</script>

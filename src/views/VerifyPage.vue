@@ -36,14 +36,14 @@ onMounted(() => {
 </script>
 <template>
     <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-60" v-if="isLoading">
-        <Icon icon="svg-spinners:180-ring" class="text-[200px] text-[#BC4D15]" />
+        <Icon icon="svg-spinners:180-ring" class="text-[200px]" :style="{ color: useView.currentColor }" />
     </div>
-    <div class="container mx-auto flex h-screen flex-col items-center justify-center gap-6 text-white">
-        <h1 class="text-center text-5xl">
+    <div class="container mx-auto flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-zinc-900 dark:text-white">
+        <h1 class="text-center text-3xl sm:text-5xl">
             Chúng tôi vừa gửi tới email của bạn một mã xác thực, vui lòng kiểm
             tra email để xác thực tài khoản hiện tại!
         </h1>
-        <RouterLink to="/login" class="text-3xl text-[#BC4D15] underline hover:opacity-75">
+        <RouterLink to="/login" class="text-2xl underline hover:opacity-75 sm:text-3xl" :style="{ color: useView.currentColor }">
             Xác nhận
         </RouterLink>
     </div>

@@ -46,7 +46,7 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="relative bg-black">
+    <div class="relative bg-zinc-100 dark:bg-black">
         <Header />
         <Sidebar />
         <div :class="[

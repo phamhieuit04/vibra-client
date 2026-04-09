@@ -4,9 +4,11 @@ import apiHelper from '@/helpers/apiHelper'
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useViewStore } from '@/stores/view';
 import defaultImgage from '@/assets/default.jpg';
 
 const authStore = useAuthStore()
+const useView = useViewStore();
 const router = useRouter()
 
 // step
@@ -83,21 +85,23 @@ onMounted(async () => {
 
 <template>
     <div v-if="isSubmitting" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60">
-        <Icon icon="svg-spinners:180-ring" class="text-[120px] text-[#BC4D15]" />
+        <Icon icon="svg-spinners:180-ring" class="text-[120px]" :style="{ color: useView.currentColor }" />
     </div>
 
-    <div class="flex h-screen items-center justify-center bg-black">
-        <div class="flex h-[780px] w-[760px] flex-col items-center rounded-2xl bg-[#121212] px-16 py-10">
+    <div class="flex min-h-screen items-center justify-center bg-gradient-to-b from-orange-100 via-amber-50 to-white px-4 py-6 dark:from-[#292929] dark:via-[#171717] dark:to-black">
+        <div class="flex h-[780px] w-full max-w-[760px] flex-col items-center rounded-2xl bg-white px-5 py-8 shadow-xl sm:px-10 md:px-16 md:py-10 dark:bg-[#121212] dark:shadow-none">
             <div class="mt-4 flex gap-3 w-full">
-                <div class="h-1.5 w-full rounded-full" :class="step === 1 ? 'bg-[#BC4D15]' : 'bg-gray-600'" />
-                <div class="h-1.5 w-full rounded-full" :class="step === 2 ? 'bg-[#BC4D15]' : 'bg-gray-600'" />
+                <div class="h-1.5 w-full rounded-full" :class="step === 1 ? '' : 'bg-gray-600'"
+                    :style="step === 1 ? { backgroundColor: useView.currentColor } : {}" />
+                <div class="h-1.5 w-full rounded-full" :class="step === 2 ? '' : 'bg-gray-600'"
+                    :style="step === 2 ? { backgroundColor: useView.currentColor } : {}" />
             </div>
 
-            <h1 class="mt-16 text-3xl font-semibold tracking-tight text-white">
+            <h1 class="mt-16 text-center text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl dark:text-white">
                 {{ step === 1 ? 'Chọn thể loại bạn thích' : 'Chọn sở thích của bạn' }}
             </h1>
 
-            <p class="mt-2 text-sm text-gray-400">
+            <p class="mt-2 text-sm text-zinc-500 dark:text-gray-400">
                 {{ step === 1
                     ? 'Bạn có thể chọn nhiều thể loại'
                     : 'Điều này giúp cá nhân hoá trải nghiệm của bạn' }}
@@ -107,7 +111,7 @@ onMounted(async () => {
                 <div v-if="loading"
                     class="relative z-10 mt-10 pb-24 grid h-[460px] w-full grid-cols-3 gap-5 overflow-hidden">
                     <div v-for="i in 9" :key="'skeleton-' + i"
-                        class="relative h-[160px] w-full overflow-hidden rounded-xl border border-transparent bg-[#1a1a1a]">
+                        class="relative h-[160px] w-full overflow-hidden rounded-xl border border-transparent bg-zinc-200 dark:bg-[#1a1a1a]">
                         <div class="absolute inset-0 shimmer"></div>
                         <div
                             class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
@@ -116,29 +120,31 @@ onMounted(async () => {
                     </div>
                 </div>
                 <div v-else
-                    class="relative z-10 mt-10 pb-24 grid h-[460px] w-full grid-cols-3 gap-5 overflow-y-scroll scrollbar-none">
+                    class="relative z-10 mt-10 pb-24 grid h-[460px] w-full grid-cols-2 gap-4 overflow-y-scroll scrollbar-none sm:grid-cols-3 sm:gap-5">
                     <div v-for="item in categories" :key="item.id" @click="toggleSelect(selectedCategories, item)"
                         class="group relative cursor-pointer rounded-xl border transition-colors" :class="selectedCategories.includes(item)
-                            ? 'border-[#BC4D15]'
+                            ? ''
                             : 'border-transparent hover:brightness-75'">
                         <img :src="item.thumbnail_path" class="h-full w-full aspect-square object-cover"
                             draggable="false" @error="(event) => (event.target.src = defaultImgage)" />
 
                         <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3"
-                            :class="selectedCategories.includes(item) ? 'ring-2 ring-[#BC4D15]' : ''">
+                            :class="selectedCategories.includes(item) ? 'ring-2' : ''"
+                            :style="selectedCategories.includes(item) ? { '--tw-ring-color': useView.currentColor } : {}">
                             <span class="text-sm font-semibold text-white drop-shadow">
                                 {{ item.name }}
                             </span>
                         </div>
 
                         <div v-if="selectedCategories.includes(item)"
-                            class="absolute right-2 top-2 rounded-full bg-[#BC4D15] px-2 py-0.5 text-xs font-medium text-black">
+                            class="absolute right-2 top-2 rounded-full px-2 py-0.5 text-xs font-medium text-black"
+                            :style="{ backgroundColor: useView.currentColor }">
                             Chọn
                         </div>
                     </div>
                 </div>
                 <div v-show="step === 1 && !loading"
-                    class="pointer-events-none absolute bottom-0 left-0 z-20 h-24 w-full bg-gradient-to-t from-[#121212] to-transparent">
+                    class="pointer-events-none absolute bottom-0 left-0 z-20 h-24 w-full bg-gradient-to-t from-white to-transparent dark:from-[#121212]">
                 </div>
             </div>
 
@@ -146,25 +152,30 @@ onMounted(async () => {
                 class="mt-10 flex h-96 w-full flex-wrap content-start gap-3 overflow-y-auto">
                 <div v-for="item in hobbies" :key="item.id" @click="toggleSelect(selectedHobbies, item)"
                     class="cursor-pointer select-none rounded-full border px-4 py-2 text-sm transition-colors" :class="selectedHobbies.includes(item)
-                        ? 'bg-[#BC4D15] border-[#BC4D15] text-black'
-                        : 'bg-gray-100 border-gray-300 text-gray-800 hover:bg-gray-200'">
+                        ? 'text-black'
+                        : 'bg-zinc-100 border-zinc-300 text-zinc-800 hover:bg-zinc-200 dark:bg-gray-100 dark:border-gray-300 dark:text-gray-800 dark:hover:bg-gray-200'"
+                    :style="selectedHobbies.includes(item)
+                        ? { backgroundColor: useView.currentColor, borderColor: useView.currentColor }
+                        : {}">
                     {{ item.name }}
                 </div>
             </div>
 
             <div class="mt-auto flex justify-end gap-3 pt-6 w-full">
                 <button v-if="step === 2" @click="prevStep"
-                    class="rounded-full px-6 py-2 text-sm text-gray-300 hover:bg-[#1f1f1f]">
+                    class="rounded-full px-6 py-2 text-sm text-zinc-700 hover:bg-zinc-200 dark:text-gray-300 dark:hover:bg-[#1f1f1f]">
                     Quay lại
                 </button>
 
                 <button v-if="step === 1" @click="nextStep" :disabled="selectedCategories.length === 0"
-                    class="rounded-full bg-[#BC4D15] px-8 py-2 text-sm font-medium text-black disabled:opacity-40">
+                    class="rounded-full px-8 py-2 text-sm font-medium text-black disabled:opacity-40"
+                    :style="{ backgroundColor: useView.currentColor }">
                     Tiếp tục
                 </button>
 
                 <button v-if="step === 2" @click="submitAll" :disabled="selectedHobbies.length === 0"
-                    class="rounded-full bg-[#BC4D15] px-8 py-2 text-sm font-medium text-black disabled:opacity-40">
+                    class="rounded-full px-8 py-2 text-sm font-medium text-black disabled:opacity-40"
+                    :style="{ backgroundColor: useView.currentColor }">
                     Hoàn thành
                 </button>
             </div>

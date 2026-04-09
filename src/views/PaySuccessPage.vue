@@ -55,7 +55,7 @@ onMounted(async () => {
 <template>
     <Loading v-if="isLoading" />
     <div
-        class="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#0A0A0A] p-6 font-sans">
+        class="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-emerald-100 via-green-50 to-white p-6 font-sans dark:bg-[#0A0A0A] dark:bg-none">
         <!-- Surrounding Effects -->
         <div class="pointer-events-none absolute inset-0">
             <!-- Meteor Shower -->
@@ -82,7 +82,7 @@ onMounted(async () => {
             <div class="relative p-16 text-center">
                 <!-- Circle with Premium Effects -->
                 <div
-                    class="relative mx-auto flex h-56 w-56 items-center justify-center rounded-full border-4 border-[#1DB954]/40 bg-[#121212] shadow-[0_0_20px_rgba(29,185,84,0.6),_0_0_40px_rgba(29,185,84,0.3)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(29,185,84,0.8),_0_0_60px_rgba(29,185,84,0.5)]">
+                    class="relative mx-auto flex h-56 w-56 items-center justify-center rounded-full border-4 border-[#1DB954]/40 bg-white/80 shadow-[0_0_20px_rgba(29,185,84,0.6),_0_0_40px_rgba(29,185,84,0.3)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(29,185,84,0.8),_0_0_60px_rgba(29,185,84,0.5)] dark:bg-[#121212]">
                     <!-- Neon Glow -->
                     <div
                         class="animate-neon-glow absolute inset-0 rounded-full bg-gradient-to-r from-[#1DB954]/50 to-[#168740]/50 blur-sm filter">

@@ -1,7 +1,13 @@
 import { defineStore } from 'pinia';
+import {
+    DEFAULT_COLOR,
+    getStoredColor,
+    setStoredColor,
+} from '@/helpers/themePreferences';
+
 export const useViewStore = defineStore('view', {
     state: () => ({
-        currentColor: null,
+        currentColor: getStoredColor() || DEFAULT_COLOR,
         selected: null,
         page: null,
         isFullscreen: false,
@@ -61,7 +67,8 @@ export const useViewStore = defineStore('view', {
             });
         },
         setCurrentColor(color) {
-            this.currentColor = color;
+            this.currentColor = color || DEFAULT_COLOR;
+            setStoredColor(this.currentColor);
         },
     },
     persist: true,

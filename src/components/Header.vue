@@ -10,11 +10,9 @@ import { useSongStore } from '@/stores/song';
 import { useViewStore } from '@/stores/view';
 import { useModalStore } from '@/stores/modal';
 import { useActivityStore } from '@/stores/activity';
-import DarkModeToggle from './DarkModeToggle.vue';
+import DarkModeToggle from '@/components/ThemeToggle.vue';
 
 const useSong = useSongStore();
-
-let openColorMenu = ref(false);
 
 const useActivity = useActivityStore();
 const useModal = useModalStore();
@@ -24,18 +22,6 @@ const router = useRouter();
 const route = useRoute();
 
 const searchValue = ref('');
-const colorList = ref([
-    '#BC4D15',
-    '#645283',
-    '#a8bfc9',
-    '#CD5C5C',
-    '#a3b18a',
-    '#9e9fa5',
-    '#926F4F',
-    '#FEA7A0',
-    '#c3a995',
-    '#44B78B',
-]);
 
 const isDarkMode = ref(false);
 
@@ -108,9 +94,6 @@ async function logout() {
 
 onMounted(() => {
     getAllCategories();
-    if (useView.currentColor == null) {
-        useView.currentColor = '#BC4D15';
-    }
 
     updateDarkMode();
 
@@ -128,17 +111,7 @@ onMounted(() => {
         <div class="relative flex items-center gap-3">
             <img class="size-20 cursor-pointer text-[64px] text-white transition duration-200 hover:opacity-80"
                 :src="LogoText" @click="goHome" />
-            <DarkModeToggle />
-            <div class="relative ml-0 h-8 w-8 cursor-pointer rounded-full bg-black shadow-2xl hover:scale-105">
-                <div @click="openColorMenu = !openColorMenu"
-                    class="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-gray-400"
-                    :style="{ backgroundColor: useView.currentColor }"></div>
-            </div>
-            <div v-if="openColorMenu"
-                class="absolute left-[200px] flex h-10 items-center rounded-xl bg-white p-1 shadow-lg transition duration-500 dark:bg-black">
-                <div class="mx-2 h-6 w-6 cursor-pointer rounded-full hover:scale-110" v-for="color in colorList"
-                    :style="{ backgroundColor: color }" @click="useView.setCurrentColor(color)"></div>
-            </div>
+            <DarkModeToggle position="header-left" />
         </div>
 
         <!-- Home & Search -->
