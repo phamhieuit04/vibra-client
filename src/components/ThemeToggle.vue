@@ -24,10 +24,9 @@ const isDark = ref(false);
 const currentColor = computed(() => useView.currentColor || DEFAULT_COLOR);
 const containerClass = computed(() => {
     if (props.position === 'header-left') {
-        return 'relative z-30 flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 px-2 py-1 shadow-sm backdrop-blur-md dark:border-zinc-700 dark:bg-black/25';
+        return 'relative z-30 flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 p-2 shadow-sm backdrop-blur-md dark:border-zinc-700 dark:bg-black/25';
     }
-
-    return 'fixed left-4 top-4 z-50 flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 px-2 py-1 shadow-sm backdrop-blur-md dark:border-zinc-700 dark:bg-black/25';
+    return 'fixed left-4 top-4 z-50 flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 p-2 shadow-sm backdrop-blur-md dark:border-zinc-700 dark:bg-black/25';
 });
 
 function toggleDarkMode() {
@@ -67,16 +66,16 @@ onMounted(() => {
             />
         </button>
 
-        <div class="relative">
+        <div class="relative flex items-center">
             <button
                 @click="openColorMenu = !openColorMenu"
-                class="h-8 w-8 rounded-full border-2 border-white/60"
+                class="size-7 rounded-full border-2 border-white/60"
                 :style="{ backgroundColor: currentColor }"
                 aria-label="Change theme color"
             ></button>
             <div
                 v-if="openColorMenu"
-                class="absolute left-full top-1/2 ml-4 flex -translate-y-1/2 flex-nowrap gap-2 rounded-xl bg-white p-2 shadow-lg dark:bg-[#1F1F1F]"
+                class="absolute left-full top-1/2 ml-5 flex -translate-y-1/2 flex-nowrap gap-2 rounded-xl bg-white p-2 shadow-xl dark:bg-[#1F1F1F]"
             >
                 <button
                     v-for="color in COLOR_OPTIONS"

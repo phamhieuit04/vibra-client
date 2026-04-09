@@ -70,10 +70,10 @@ async function sendGreeting() {
         <Icon icon="svg-spinners:180-ring" class="text-[200px]" :style="{ color: useView.currentColor }" />
     </div>
     <div
-        class="flex min-h-screen items-center justify-center bg-gradient-to-b from-orange-100 via-amber-50 to-white px-4 py-8 dark:from-[#292929] dark:via-[#171717] dark:to-black"
+        class="flex min-h-screen items-center justify-center bg-gradient-to-b px-4 py-8 dark:from-[#292929] dark:via-[#171717] dark:to-black"
     >
         <div
-            class="flex h-auto w-full max-w-[734px] flex-col items-center rounded-2xl bg-white px-6 py-8 shadow-xl sm:px-12 lg:h-[740px] lg:px-24 dark:bg-[#121212] dark:shadow-none"
+            class="flex h-auto w-full max-w-[734px] flex-col items-center rounded-2xl bg-white px-6 py-8 shadow-2xl sm:px-12 lg:h-[740px] lg:px-24 dark:bg-[#121212] dark:shadow-none"
         >
             <!-- Start Spotify logo -->
             <RouterLink to="/">

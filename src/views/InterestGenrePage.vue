@@ -88,8 +88,8 @@ onMounted(async () => {
         <Icon icon="svg-spinners:180-ring" class="text-[120px]" :style="{ color: useView.currentColor }" />
     </div>
 
-    <div class="flex min-h-screen items-center justify-center bg-gradient-to-b from-orange-100 via-amber-50 to-white px-4 py-6 dark:from-[#292929] dark:via-[#171717] dark:to-black">
-        <div class="flex h-[780px] w-full max-w-[760px] flex-col items-center rounded-2xl bg-white px-5 py-8 shadow-xl sm:px-10 md:px-16 md:py-10 dark:bg-[#121212] dark:shadow-none">
+    <div class="flex min-h-screen items-center justify-center bg-gradient-to-b px-4 py-6 dark:from-[#292929] dark:via-[#171717] dark:to-black">
+        <div class="flex h-[780px] w-full max-w-[760px] flex-col items-center rounded-2xl bg-white px-5 py-8 shadow-2xl sm:px-10 md:px-16 md:py-10 dark:bg-[#121212] dark:shadow-none">
             <div class="mt-4 flex gap-3 w-full">
                 <div class="h-1.5 w-full rounded-full" :class="step === 1 ? '' : 'bg-gray-600'"
                     :style="step === 1 ? { backgroundColor: useView.currentColor } : {}" />

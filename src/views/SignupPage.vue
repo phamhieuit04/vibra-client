@@ -40,7 +40,7 @@ const signup = async () => {
 </script>
 <template>
     <div
-        class="flex min-h-screen items-center justify-center bg-gradient-to-b from-orange-100 via-amber-50 to-white px-4 py-8 dark:from-[#292929] dark:via-[#171717] dark:to-black"
+        class="flex min-h-screen items-center justify-center bg-gradient-to-b px-4 py-8 dark:from-[#292929] dark:via-[#171717] dark:to-black"
     >
         <div class="flex w-96 flex-col items-center">
             <!-- Start signup header -->
