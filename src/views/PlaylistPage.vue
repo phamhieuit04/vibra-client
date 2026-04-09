@@ -1,6 +1,6 @@
 <script setup>
 import apiHelper from '@/helpers/apiHelper';
-import SongRow from './SongRow.vue';
+import SongRow from '@/components/SongRow.vue';
 import { Icon } from '@iconify/vue';
 import { useSongStore } from '@/stores/song';
 import { useViewStore } from '@/stores/view';

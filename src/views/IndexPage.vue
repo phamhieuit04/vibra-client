@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import Header from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import Player from '@/components/Player.vue';
-import SongPage from '@/components/SongPage.vue';
+import SongPage from '@/views/SongPage.vue';
 import SidePanel from '@/components/SidePanel.vue';
 import WaitListPanel from '@/components/WaitListPanel.vue';
 import Notify from '@/components/Notify.vue';

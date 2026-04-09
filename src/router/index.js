@@ -1,19 +1,19 @@
 import { useAuthStore } from '@/stores/auth';
-import Index from '@/views/index.vue';
-import Login from '@/views/login.vue';
-import Signup from '@/views/signup.vue';
-import Verify from '@/views/verify.vue';
-import Payfail from '@/views/payfail.vue';
-import Paysuccess from '@/views/paysuccess.vue';
-import VerifyDone from '@/views/verify-done.vue';
-import InterestGerne from '@/views/interest-gerne.vue';
-import HomePage from '@/components/HomePage.vue';
-import PlaylistPage from '@/components/PlaylistPage.vue';
-import UserPage from '@/components/UserPage.vue';
-import SearchPage from '@/components/SearchPage.vue';
-import ArtistPage from '@/components/ArtistPage.vue';
-import CategoriesPage from '@/components/CategoriesPage.vue';
-import CategoriesSongPage from '@/components/CategoriesSongPage.vue';
+import IndexPage from '@/views/IndexPage.vue';
+import LoginPage from '@/views/LoginPage.vue';
+import SignupPage from '@/views/SignupPage.vue';
+import VerifyPage from '@/views/VerifyPage.vue';
+import PayFailPage from '@/views/PayFailPage.vue';
+import PaySuccessPage from '@/views/PaySuccessPage.vue';
+import VerifyDonePage from '@/views/VerifyDonePage.vue';
+import InterestGenrePage from '@/views/InterestGenrePage.vue';
+import HomePage from '@/views/HomePage.vue';
+import PlaylistPage from '@/views/PlaylistPage.vue';
+import UserPage from '@/views/UserPage.vue';
+import SearchPage from '@/views/SearchPage.vue';
+import ArtistPage from '@/views/ArtistPage.vue';
+import CategoriesPage from '@/views/CategoriesPage.vue';
+import CategoriesSongPage from '@/views/CategoriesSongPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -22,17 +22,17 @@ const router = createRouter({
         {
             path: '/login',
             name: 'login',
-            component: Login,
+            component: LoginPage,
         },
         {
             path: '/signup',
             name: 'signup',
-            component: Signup,
+            component: SignupPage,
         },
         {
             path: '/',
             name: 'index',
-            component: Index,
+            component: IndexPage,
             meta: {
                 requiresAuth: true,
             },
@@ -77,27 +77,27 @@ const router = createRouter({
         {
             path: '/verify',
             name: 'verify',
-            component: Verify,
+            component: VerifyPage,
         },
         {
             path: '/payfail',
             name: 'payfail',
-            component: Payfail,
+            component: PayFailPage,
         },
         {
             path: '/paysuccess',
             name: 'paysuccess',
-            component: Paysuccess,
+            component: PaySuccessPage,
         },
         {
             path: '/verify-done',
             name: 'verify-done',
-            component: VerifyDone,
+            component: VerifyDonePage,
         },
         {
             path: '/interest-gerne',
             name: 'interest-gerne',
-            component: InterestGerne,
+            component: InterestGenrePage,
         }
     ],
 });

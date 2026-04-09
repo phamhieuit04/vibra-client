@@ -17,6 +17,7 @@ const authStore = useAuthStore();
 const useSong = useSongStore();
 const useModal = useModalStore();
 const useActivity = useActivityStore();
+const router = useRouter();
 
 const { followArtistList, followAlbumList, favSongList, myPlaylistList } =
     storeToRefs(useActivity);
