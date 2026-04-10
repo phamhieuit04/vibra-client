@@ -149,16 +149,42 @@ onMounted(async () => {
             </div>
 
             <div v-show="step === 2 && !loading"
-                class="mt-10 flex h-96 w-full flex-wrap content-start gap-3 overflow-y-auto">
-                <div v-for="item in hobbies" :key="item.id" @click="toggleSelect(selectedHobbies, item)"
-                    class="cursor-pointer select-none rounded-full border px-4 py-2 text-sm transition-colors" :class="selectedHobbies.includes(item)
-                        ? 'text-black'
-                        : 'bg-zinc-100 border-zinc-300 text-zinc-800 hover:bg-zinc-200 dark:bg-gray-100 dark:border-gray-300 dark:text-gray-800 dark:hover:bg-gray-200'"
-                    :style="selectedHobbies.includes(item)
-                        ? { backgroundColor: useView.currentColor, borderColor: useView.currentColor }
-                        : {}">
-                    {{ item.name }}
+                class="relative mt-10 w-full">
+                
+                <div class="relative z-10 grid h-[460px] w-full grid-cols-2 gap-4 overflow-y-scroll pb-24 scrollbar-none sm:grid-cols-3 sm:gap-5">
+                    <div v-for="item in hobbies" :key="item.id"
+                        @click="toggleSelect(selectedHobbies, item)"
+                        class="group relative cursor-pointer overflow-hidden rounded-xl transition-all duration-200"
+                        :class="selectedHobbies.includes(item)
+                            ? 'border-2'
+                            : 'border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-500'"
+                        :style="selectedHobbies.includes(item)
+                            ? { borderColor: useView.currentColor }
+                            : {}">
+
+                        <div class="flex h-full w-full items-center justify-center bg-white dark:bg-[#1a1a1a]">
+                            <span class="text-center text-sm font-medium text-zinc-800 dark:text-zinc-200 px-3">
+                                {{ item.name }}
+                            </span>
+                        </div>
+
+                        <div v-if="selectedHobbies.includes(item)"
+                            class="absolute right-2 top-2 rounded-full px-2 py-0.5 text-xs font-medium text-black"
+                            :style="{ backgroundColor: useView.currentColor }">
+                            Chọn
+                        </div>
+                    </div>
                 </div>
+
+                <div
+                    class="pointer-events-none absolute bottom-0 left-0 z-20 h-24 w-full bg-gradient-to-t from-white to-transparent dark:from-[#121212]">
+                </div>
+
+                <p class="mt-3 text-center text-xs text-zinc-400 dark:text-zinc-600">
+                    {{ selectedHobbies.length > 0
+                        ? `Đã chọn ${selectedHobbies.length} sở thích`
+                        : 'Chọn ít nhất một sở thích để tiếp tục' }}
+                </p>
             </div>
 
             <div class="mt-auto flex justify-end gap-3 pt-6 w-full">
