@@ -3,13 +3,16 @@ import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { storeToRefs } from 'pinia';
+
 import { useAuthStore } from '@/stores/auth';
 import { useViewStore } from '@/stores/view';
 import { useSongStore } from '@/stores/song';
 import { useModalStore } from '@/stores/modal';
 import { useActivityStore } from '@/stores/activity';
+
 import defaultImgage from '@/assets/default.jpg';
 import MyLogo from '@/assets/MyLogo.svg';
+
 import PlayerFunc from './PlayerFunc.vue';
 import PlaylistOptionRow from './PlaylistOptionRow.vue';
 
@@ -18,169 +21,423 @@ const authStore = useAuthStore();
 const useSong = useSongStore();
 const useModal = useModalStore();
 const useActivity = useActivityStore();
-const { isFullscreen } = storeToRefs(useView);
-const { isPlaying, currentPlaylist, currentTrack, isShuffle, audioVersion } = storeToRefs(useSong);
-const { favSongList, myPlaylistList, isPlaylist } = storeToRefs(useActivity);
 
-let isHover = ref(false);
-let isTrackTimeCurrent = ref(null);
-let isTrackTimeTotal = ref(null);
-let seeker = ref(null);
-let seekerContainer = ref(null);
-let range = ref(0);
+const { isFullscreen } = storeToRefs(useView);
+
+const {
+
+    isPlaying,
+    currentPlaylist,
+    currentTrack,
+    isShuffle,
+    audioVersion
+
+} = storeToRefs(useSong);
+
+const {
+
+    favSongList,
+    myPlaylistList,
+
+} = storeToRefs(useActivity);
+
+const seeker = ref(null);
+const seekerContainer = ref(null);
+
+const range = ref(0);
+
+const isTrackTimeCurrent =
+    ref('00:00');
+
+const isTrackTimeTotal =
+    ref('00:00');
 
 const isLoved = ref(false);
+
 const openMenu = ref(false);
 
 async function loveThisSong() {
+
     try {
-        const res = await apiHelper.get(`/song/store/${currentTrack.value.id}`, {
-            headers: { Authorization: 'Bearer ' + authStore.user.token },
-        });
+
+        const res = await apiHelper.get(
+
+            `/song/store/${currentTrack.value.id}`,
+
+            {
+                headers: {
+                    Authorization:
+                        'Bearer ' +
+                        authStore.user.token,
+                },
+            }
+
+        );
+
         if (res.data.code == 200) {
+
             useActivity.fetchData();
-            isLoved.value = !isLoved.value;
-            useActivity.addNotify(false, 'Đã thêm bài hát vào danh sách yêu thích!');
+
+            isLoved.value = true;
+
+            useActivity.addNotify(
+
+                false,
+
+                'Đã thêm bài hát vào danh sách yêu thích!'
+
+            );
+
         }
+
     } catch (e) {
+
         console.log(e);
-        useActivity.addNotify(true, 'Call Api thất bại!');
+
+        useActivity.addNotify(
+            true,
+            'Call Api thất bại!'
+        );
+
     }
+
 }
 
 async function unloveThisSong() {
+
     try {
-        const res = await apiHelper.get(`/library/destroy-favorite-song/${currentTrack.value.id}`, {
-            headers: { Authorization: 'Bearer ' + authStore.user.token },
-        });
+
+        const res = await apiHelper.get(
+
+            `/library/destroy-favorite-song/${currentTrack.value.id}`,
+
+            {
+                headers: {
+                    Authorization:
+                        'Bearer ' +
+                        authStore.user.token,
+                },
+            }
+
+        );
+
         if (res.data.code == 200) {
+
             useActivity.fetchData();
-            isLoved.value = !isLoved.value;
-            useActivity.addNotify(false, 'Đã bỏ yêu thích bài hát!');
+
+            isLoved.value = false;
+
+            useActivity.addNotify(
+
+                false,
+
+                'Đã bỏ yêu thích bài hát!'
+
+            );
+
         }
+
     } catch (e) {
+
         console.log(e);
-        useActivity.addNotify(true, 'Call Api thất bại!');
+
+        useActivity.addNotify(
+            true,
+            'Call Api thất bại!'
+        );
+
     }
+
 }
 
 async function downloadThisSong() {
+
     if (!currentTrack.value.id) return;
+
     useModal.loading = true;
+
     try {
-        const res = await apiHelper.get(`/payment/create-bill?song_id=${currentTrack.value.id}`, {
-            headers: { Authorization: 'Bearer ' + authStore.user.token },
-        });
+
+        const res = await apiHelper.get(
+
+            `/payment/create-bill?song_id=${currentTrack.value.id}`,
+
+            {
+                headers: {
+                    Authorization:
+                        'Bearer ' +
+                        authStore.user.token,
+                },
+            }
+
+        );
+
         if (res.data.code == 200) {
-            useActivity.setDownload(res.data.data);
+
+            useActivity.setDownload(
+                res.data.data
+            );
+
             useModal.loading = false;
-            window.location.href = res.data.data.checkout_url;
+
+            window.location.href =
+                res.data.data.checkout_url;
+
         } else {
+
             useModal.loading = false;
-            useActivity.addNotify(true, 'Không lấy được link thanh toán!');
+
+            useActivity.addNotify(
+
+                true,
+
+                'Không lấy được link thanh toán!'
+
+            );
+
         }
+
     } catch (err) {
+
         console.error(err);
+
         useModal.loading = false;
-        useActivity.addNotify(true, 'Không lấy được link thanh toán!');
+
+        useActivity.addNotify(
+
+            true,
+
+            'Không lấy được link thanh toán!'
+
+        );
+
     }
+
 }
 
 function onUserPress() {
+
     openMenu.value = false;
+
 }
 
-function bindAudioEvents() {
-    const audio = useSong.audio;
-    if (!audio) return;
+function togglePlay() {
 
-    audio.addEventListener('timeupdate', () => {
-        const minutes = Math.floor(audio.currentTime / 60);
-        const seconds = Math.floor(audio.currentTime % 60);
-        isTrackTimeCurrent.value = minutes + ':' + seconds.toString().padStart(2, '0');
-        const value = (100 / audio.duration) * audio.currentTime;
-        range.value = value;
-        if (seeker.value) seeker.value.value = value;
-    });
+    useSong.playOrPauseSong();
 
-    audio.addEventListener('loadedmetadata', () => {
-        const minutes = Math.floor(audio.duration / 60);
-        const seconds = Math.floor(audio.duration % 60);
-        isTrackTimeTotal.value = minutes + ':' + seconds.toString().padStart(2, '0');
-    });
+}
 
-    audio.addEventListener('ended', () => {
-        useSong.nextSongs();
-    });
+function nextSong() {
+
+    useSong.nextSongs();
+
+}
+
+function prevSong() {
+
+    useSong.prevSongs();
+
 }
 
 function onSeekerChange() {
-    const audio = useSong.audio;
-    if (!audio) return;
-    const time = audio.duration * (seeker.value.value / 100);
-    audio.currentTime = time;
-}
 
-function onSeekerMousedown() {
-    const audio = useSong.audio;
-    if (!audio) return;
-    audio.pause();
-    isPlaying.value = false;
-}
+    useSong.seekTo(
 
-function onSeekerMouseup() {
-    const audio = useSong.audio;
-    if (!audio) return;
-    audio.play()
-        .then(() => { isPlaying.value = true; })
-        .catch((err) => { console.warn('play() bị chặn:', err.message); });
+        Number(
+            seeker.value.value
+        )
+
+    );
+
 }
 
 function onSeekerContainerClick(e) {
-    const audio = useSong.audio;
-    if (!audio) return;
-    const clickPosition = (e.pageX - seekerContainer.value.offsetLeft) / seekerContainer.value.offsetWidth;
-    const time = audio.duration * clickPosition;
-    audio.currentTime = time;
-    range.value = (100 / audio.duration) * audio.currentTime;
-    if (seeker.value) seeker.value.value = range.value;
+
+    const clickPosition =
+
+        (e.pageX -
+            seekerContainer.value.offsetLeft)
+
+        / seekerContainer.value.offsetWidth;
+
+    useSong.seekTo(
+
+        clickPosition * 100
+
+    );
+
 }
 
 onMounted(() => {
-    isPlaying.value = false;
-    if (!currentTrack.value) return;
-    useSong.playThisSong(currentTrack.value);
-    bindAudioEvents();
-    setTimeout(() => {
-        if (useSong.audio) {
-            useSong.audio.pause();
-            isPlaying.value = false;
-        }
-    }, 300);
+
+    useSong.initializeSocket();
+
+    console.log("init player");
+
 });
 
 watch(audioVersion, () => {
-    isTrackTimeCurrent.value = null;
-    isTrackTimeTotal.value = null;
+
+    isTrackTimeCurrent.value =
+        '00:00';
+
+    isTrackTimeTotal.value =
+        '00:00';
+
     range.value = 0;
-    if (seeker.value) seeker.value.value = 0;
-    bindAudioEvents();
+
+    if (seeker.value) {
+
+        seeker.value.value = 0;
+
+    }
+
 });
 
-watch(() => favSongList.value.songs, () => {
-    isLoved.value = false;
-    favSongList.value.songs.forEach((song) => {
-        if (song.id === currentTrack.value.id) isLoved.value = true;
-    });
-});
+watch(
 
-watch(() => currentTrack.value, () => {
-    openMenu.value = false;
-    isLoved.value = false;
-    favSongList.value.songs.forEach((song) => {
-        if (song.id === currentTrack.value.id) isLoved.value = true;
-    });
-});
+    () => useSong.audio,
+
+    (audio) => {
+
+        if (!audio) return;
+
+        audio.addEventListener(
+
+            'timeupdate',
+
+            () => {
+
+                const minutes =
+
+                    Math.floor(
+                        audio.currentTime / 60
+                    );
+
+                const seconds =
+
+                    Math.floor(
+                        audio.currentTime % 60
+                    );
+
+                isTrackTimeCurrent.value =
+
+                    minutes +
+                    ':' +
+                    seconds
+                        .toString()
+                        .padStart(2, '0');
+
+                if (audio.duration) {
+
+                    range.value =
+
+                        (100 / audio.duration) *
+                        audio.currentTime;
+
+                }
+
+            }
+
+        );
+
+        audio.addEventListener(
+
+            'loadedmetadata',
+
+            () => {
+
+                const minutes =
+
+                    Math.floor(
+                        audio.duration / 60
+                    );
+
+                const seconds =
+
+                    Math.floor(
+                        audio.duration % 60
+                    );
+
+                isTrackTimeTotal.value =
+
+                    minutes +
+                    ':' +
+                    seconds
+                        .toString()
+                        .padStart(2, '0');
+
+            }
+
+        );
+
+    }
+
+);
+
+watch(
+
+    () => favSongList.value.songs,
+
+    () => {
+
+        isLoved.value = false;
+
+        favSongList.value.songs.forEach(
+
+            (song) => {
+
+                if (
+
+                    song.id ===
+                    currentTrack.value.id
+
+                ) {
+
+                    isLoved.value = true;
+
+                }
+
+            }
+
+        );
+
+    }
+
+);
+
+watch(
+
+    () => currentTrack.value,
+
+    () => {
+
+        openMenu.value = false;
+
+        isLoved.value = false;
+
+        favSongList.value.songs.forEach(
+
+            (song) => {
+
+                if (
+
+                    song.id ===
+                    currentTrack.value.id
+
+                ) {
+
+                    isLoved.value = true;
+
+                }
+
+            }
+
+        );
+
+    }
+
+);
 </script>
 
 <template>
@@ -269,14 +526,14 @@ watch(() => currentTrack.value, () => {
         <div class="mx-auto w-2/4 max-w-[35%]">
             <div class="flex-col items-center justify-center">
                 <div class="flex h-[30px] items-center justify-center">
-                    <button v-if="isShuffle" class="mx-2" @click="isShuffle = false">
+                    <button v-if="isShuffle" class="mx-2" @click="useSong.toggleShuffle">
                         <Icon
                             icon="mdi:shuffle"
                             :class="isFullscreen ? 'text-white' : 'text-zinc-700 dark:text-[#FFE5D6]'"
                             class="size-5"
                         />
                     </button>
-                    <button v-else class="mx-2" @click="isShuffle = true">
+                    <button v-else class="mx-2" @click="useSong.toggleShuffle">
                         <Icon
                             icon="mdi:shuffle-disabled"
                             :class="isFullscreen ? 'text-white' : 'text-zinc-700 dark:text-[#FFE5D6]'"
@@ -284,7 +541,7 @@ watch(() => currentTrack.value, () => {
                         />
                     </button>
 
-                    <button class="mx-2" @click="useSong.prevSongs">
+                    <button class="mx-2" @click="prevSong">
                         <Icon
                             icon="fa6-solid:backward-step"
                             :class="isFullscreen ? 'text-white' : 'text-zinc-700 dark:text-[#FFE5D6]'"
@@ -292,7 +549,7 @@ watch(() => currentTrack.value, () => {
                         />
                     </button>
 
-                    <button class="mx-3 rounded-full p-1" @click="useSong.playOrPauseThisSong(currentTrack)">
+                    <button class="mx-3 rounded-full p-1" @click="togglePlay">
                         <Icon
                             icon="material-symbols:play-circle-rounded"
                             v-if="!isPlaying"
@@ -307,7 +564,7 @@ watch(() => currentTrack.value, () => {
                         />
                     </button>
 
-                    <button class="mx-2" @click="useSong.nextSongs()">
+                    <button class="mx-2" @click="nextSong">
                         <Icon
                             icon="fa6-solid:forward-step"
                             :class="isFullscreen ? 'text-white' : 'text-zinc-700 dark:text-[#FFE5D6]'"
@@ -346,8 +603,6 @@ watch(() => currentTrack.value, () => {
                         :class="isFullscreen ? 'accent-white' : 'accent-zinc-900 dark:accent-white'"
                         class="absolute z-40 my-2 h-0 w-full cursor-pointer appearance-none rounded-full focus:outline-none"
                         @change="onSeekerChange"
-                        @mousedown="onSeekerMousedown"
-                        @mouseup="onSeekerMouseup"
                     />
                     <div
                         :class="isFullscreen ? 'bg-white' : 'bg-zinc-900 dark:bg-white'"

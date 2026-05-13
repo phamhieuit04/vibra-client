@@ -79,7 +79,7 @@ onMounted(() => {
                             {{ track?.name }}
                         </div>
                         <span class="text-sm font-semibold text-gray-600 dark:text-gray-400">{{
-                            track?.author.name
+                            track?.author?.name
                         }}</span>
                     </div>
                 </div>

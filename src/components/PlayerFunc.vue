@@ -64,7 +64,6 @@ onMounted(() => {
 
             <h1 class="absolute right-9 top-0 mt-[-6px] text-[10px]"
                 :class="isFullscreen ? 'text-white' : 'text-black dark:text-white'">
-                {{ currentWaitlist.length }}
             </h1>
 
             <Icon icon="ri:video-line" v-if="!useView.showSidePanel || useView.sidePanelState !== 'data'"
