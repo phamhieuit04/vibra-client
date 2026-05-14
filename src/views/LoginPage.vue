@@ -37,7 +37,20 @@ const login = async () => {
                 console.log('Chưa verify');
                 router.push('/verify');
             } else {
-                router.push('/interest-gerne');
+                const res = await apiHelper.get('/home/recent-rotation', {
+                    params: {
+                        limit: 1,
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + authStore.user.token,
+                    },
+                });
+                console.log(res.data.data.length);
+                if(res.data.data.length > 0){
+                    router.push('/');
+                } else{
+                    router.push('/interest-gerne');
+                }
                 sendGreeting();
             }
             isLoading.value = false;

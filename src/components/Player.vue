@@ -416,7 +416,7 @@ watch(
 
         isLoved.value = false;
 
-        favSongList.value.songs.forEach(
+        favSongList?.value?.songs?.forEach(
 
             (song) => {
 

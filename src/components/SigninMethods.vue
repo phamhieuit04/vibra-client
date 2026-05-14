@@ -76,12 +76,26 @@ export default {
                     email: authRes.user.email,
                     device_token: this.deviceToken,
                 },
-            }).then((apiRes) => {
+            }).then(async (apiRes) => {
                 if (apiRes.data.code === 200) {
                     this.authStore.setIsLoggedIn(true);
                     this.authStore.setUser(apiRes.data.data);
+
+                    const res = await apiHelper.get('/home/recent-rotation', {
+                        params: {
+                            limit: 1,
+                        },
+                        headers: {
+                            Authorization: 'Bearer ' + this.authStore.user.token,
+                        },
+                    });
+                    console.log(res.data.data.length);
+                    if(res.data.data.length > 0){
+                        this.$router.push('/');
+                    } else{
+                        this.$router.push('/interest-gerne');
+                    }
                     this.sendGreeting();
-                    this.$router.push('/interest-gerne');
                 }
             }).catch((apiError) => {
                 console.log(apiError);
