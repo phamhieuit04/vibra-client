@@ -86,7 +86,6 @@ export const useSongStore = defineStore('song', {
             });
             const song = res.data.data;
 
-
             const songs = await Promise.all(
                 queue.songIds.map(async songId => {
                     const res = await apiHelper.get('/song/show/' + songId, {
@@ -101,10 +100,7 @@ export const useSongStore = defineStore('song', {
             this.currentWaitlist.length = 0;
             this.currentWaitlist.push(...songs);
 
-
             this.isShuffle = state.player.isShuffleEnabled;
-
-            console.log(this.isShuffle);
 
             if (!song) return;
 
@@ -115,10 +111,11 @@ export const useSongStore = defineStore('song', {
             ) {
                 console.log("state song changed");
                 await this.loadTrack(song);
-
             }
 
-            if (!this.audio) return;
+            if(!this.audio){
+                this.loadTrack(this.currentTrack);
+            }
 
             // sync play/pause
             if (player.isPlaying) {
@@ -310,6 +307,10 @@ export const useSongStore = defineStore('song', {
             const authStore =
                 useAuthStore();
 
+            if(!this.audio){
+                this.loadTrack(this.currentTrack);
+            }
+
             if (this.isPlaying) {
 
                 socket.emit('pause', {
@@ -369,6 +370,48 @@ export const useSongStore = defineStore('song', {
         playThisSongInWaitlist(track){
             this.playThisSong(track);
             this.loadTrack(track);
+        },
+
+        deleteSongFromWaitlist(track){
+            socket.emit('queue:remove', {
+                userId:
+                    useAuthStore().user.id,
+                songIds:
+                    [track.id]
+            });
+        },
+
+        deleteAllFromWaitlist(){
+            console.log("delete all song from waitlist");
+
+            const ids = [];
+            this.currentWaitlist.forEach(song => {
+                if(this.currentTrack.id != song.id){
+                    ids.push(song.id);
+                }
+            });
+
+            socket.emit('queue:remove', {
+                userId:
+                    useAuthStore().user.id,
+                songIds:
+                    ids
+            });
+        },
+
+        addPlaylistToWaitlist(tracks){
+            const ids = [];
+            tracks.forEach(track => {
+                console.log(track.id);
+                ids.push(track.id);
+            });
+            socket.emit('queue:add', {
+                userId:
+                    useAuthStore().user.id,
+                songIds:
+                    ids
+            });
+
         },
 
         setDownload(download) {

@@ -1,24 +1,13 @@
 <script setup>
 import { onMounted, ref, watch, toRefs, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
-import axios from 'axios';
 import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/stores/auth';
-import { useViewStore } from '@/stores/view';
 import { useSongStore } from '@/stores/song';
-import { useModalStore } from '@/stores/modal';
-import { useActivityStore } from '@/stores/activity';
 import defaultImgage from '@/assets/default.jpg';
 
-const useView = useViewStore();
-const authStore = useAuthStore();
 const useSong = useSongStore();
-const useModal = useModalStore();
-const useActivity = useActivityStore();
 const { currentTrack, currentWaitlist, isPlaying } = storeToRefs(useSong);
 
-let isHover = ref(false);
 let isTrackTime = ref(null);
 
 onMounted(() => {
@@ -66,13 +55,19 @@ onMounted(() => {
         <div class="mx-4 my-4 h-full overflow-y-auto scrollbar-none">
             <div class="flex justify-between">
                 <h2 class="mb-1 text-2xl font-semibold">Bài hát tiếp theo</h2>
-                <button @click="currentWaitlist = []"
+                <button @click="useSong.deleteAllFromWaitlist"
                     class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Xóa tất
                     cả</button>
             </div>
-            <div class="flex cursor-pointer items-center justify-between rounded-md p-3 hover:bg-gray-100 dark:hover:bg-[#2A2929]"
-                v-for="(track, index) in currentWaitlist" :key="track?.id"
-                @click="useSong.playThisSongInWaitlist(track)">
+            <div
+                v-for="(track, index) in currentWaitlist"
+                :key="track?.id"
+                @click="useSong.playThisSongInWaitlist(track)"
+                class="flex cursor-pointer items-center justify-between rounded-md p-3 hover:bg-gray-100 dark:hover:bg-[#2A2929]"
+                :class="{
+                    'bg-gray-100 dark:bg-[#2A2929]': currentTrack?.id === track?.id
+                }"
+            >
                 <div class="flex w-full items-center py-1.5">
                     <div>
                         <div class="font-semibold">
